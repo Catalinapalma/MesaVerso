@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -11,6 +11,10 @@
 
     <title>Estrategia | MesaVerso</title>
 
+    <!-- S2: Bootstrap 5.3.6 guardado en vendor/ (funciona sin conexión a internet). -->
+    <link rel="stylesheet" href="vendor/bootstrap.min.css">
+
+    <!-- S1: estilos propios. Se cargan DESPUÉS de Bootstrap para conservar el diseño de MesaVerso. -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -34,7 +38,7 @@
                 </span>
             </a>
 
-            <span class="header-aside">
+            <span class="header-aside d-none d-md-inline">
                 UNA MESA. MIL AVENTURAS.
             </span>
 
@@ -44,13 +48,30 @@
 
 
     <!-- ==================== NAVEGACIÓN ==================== -->
-    <nav class="top-nav" aria-label="Navegación principal">
+    <!-- S2: navbar de Bootstrap. En pantallas pequeñas el menú se oculta tras el botón ☰. -->
+    <nav class="navbar navbar-expand-md top-nav" aria-label="Navegación principal" data-bs-theme="dark">
 
         <div class="shell nav-inner">
 
-            <a href="index.html">TIENDA</a>
-            <a href="categorias.html">CATEGORÍAS</a>
-            <a href="ofertas.html">OFERTAS</a>
+            <span class="navbar-brand d-md-none">MENÚ</span>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                    aria-controls="menuPrincipal" aria-expanded="false"
+                    aria-label="Abrir o cerrar el menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">TIENDA</a></li>
+                    <li class="nav-item"><a class="nav-link" href="categorias.html">CATEGORÍAS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ofertas.html">OFERTAS</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link nav-register" href="registro.html">REGISTRO</a></li>
+                </ul>
+            </div>
 
         </div>
 
@@ -103,11 +124,21 @@
 
 
             <!-- ==================== JUEGOS DE ESTRATEGIA ==================== -->
-            <div class="game-grid">
+            <!-- S2: buscador. JavaScript (js/catalogo.js) oculta o muestra las fichas mientras se escribe. -->
+            <div class="catalog-search" role="search">
+                <label for="buscarJuego" class="form-label">Buscar en esta página</label>
+                <input id="buscarJuego" class="form-control" type="search"
+                       placeholder="Escribe el nombre de un juego" autocomplete="off">
+                <p id="resultadoBusqueda" class="search-status" aria-live="polite"></p>
+            </div>
+
+            <!-- S2: la rejilla Bootstrap reemplaza a CSS Grid: 1 columna (celular), 2 (tablet), 3 (escritorio). -->
+            <div class="row g-3 game-grid">
 
 
                 <!-- ==================== JUEGO 1: CATAN ==================== -->
-                <article class="game-card">
+                <div class="col-12 col-md-6 col-lg-4">
+                <article class="game-card h-100">
 
                     <!-- Imagen y descuento -->
                     <div class="cover">
@@ -154,10 +185,12 @@
                     </div>
 
                 </article>
+                </div>
 
 
                 <!-- ==================== JUEGO 2: TICKET TO RIDE ==================== -->
-                <article class="game-card">
+                <div class="col-12 col-md-6 col-lg-4">
+                <article class="game-card h-100">
 
                     <!-- Imagen y descuento -->
                     <div class="cover">
@@ -204,10 +237,12 @@
                     </div>
 
                 </article>
+                </div>
 
 
                 <!-- ==================== JUEGO 3: AJEDREZ CLÁSICO ==================== -->
-                <article class="game-card">
+                <div class="col-12 col-md-6 col-lg-4">
+                <article class="game-card h-100">
 
                     <!-- Imagen -->
                     <div class="cover">
@@ -250,6 +285,7 @@
                     </div>
 
                 </article>
+                </div>
 
             </div>
 
@@ -277,7 +313,7 @@
 
         <div class="shell">
 
-            MESAVERSO © 2026
+            MESAVERSO © <span id="anio-actual">2026</span>
 
             <span>
                 · Catálogo demostrativo para FullStack II
@@ -287,6 +323,15 @@
         </div>
 
     </footer>
+
+    <!-- S2: Bootstrap JS. Solo hace funcionar el menú colapsable (botón ☰). -->
+    <script src="vendor/bootstrap.bundle.min.js"></script>
+
+    <!-- S2: JavaScript propio común a todas las páginas (menú activo, año del pie). -->
+    <script src="js/main.js"></script>
+
+    <!-- S2: buscador de juegos de esta página. -->
+    <script src="js/catalogo.js"></script>
 
 </body>
 </html>

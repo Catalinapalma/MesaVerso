@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+        name="description"
+        content="Regístrate en MesaVerso para acumular recompensas y llevar el registro de tus juegos."
+    >
+
+    <title>Registro | MesaVerso</title>
+
+    <!-- S2: Bootstrap 5.3.6 guardado en vendor/ (funciona sin conexión a internet). -->
+    <link rel="stylesheet" href="vendor/bootstrap.min.css">
+
+    <!-- S1: estilos propios. Se cargan DESPUÉS de Bootstrap para conservar el diseño de MesaVerso. -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="site-header">
+
+        <div class="shell header-inner">
+
+            <a
+                class="brand"
+                href="index.html"
+                aria-label="MesaVerso, ir al inicio"
+            >
+                <span class="logo-mark" aria-hidden="true">⚄</span>
+
+                <span>
+                    MESAVERSO
+                    <small>Tu universo de juegos de mesa</small>
+                </span>
+            </a>
+
+            <span class="header-aside d-none d-md-inline">
+                UNA MESA. MIL AVENTURAS.
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- ==================== NAVEGACIÓN ==================== -->
+    <!-- S2: navbar de Bootstrap. En pantallas pequeñas el menú se oculta tras el botón ☰. -->
+    <nav class="navbar navbar-expand-md top-nav" aria-label="Navegación principal" data-bs-theme="dark">
+
+        <div class="shell nav-inner">
+
+            <span class="navbar-brand d-md-none">MENÚ</span>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                    aria-controls="menuPrincipal" aria-expanded="false"
+                    aria-label="Abrir o cerrar el menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">TIENDA</a></li>
+                    <li class="nav-item"><a class="nav-link" href="categorias.html">CATEGORÍAS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ofertas.html">OFERTAS</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link nav-register" href="registro.html">REGISTRO</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <main id="contenido" class="shell">
+
+        <!-- ==================== RUTA DE NAVEGACIÓN ==================== -->
+        <p class="breadcrumb">
+            <a href="index.html">Tienda</a>
+            <span aria-hidden="true">›</span>
+            Registro
+        </p>
+
+
+        <!-- ==================== ENCABEZADO ==================== -->
+        <!-- S2: se reutiliza el encabezado de categorías creado en la Semana 1. -->
+        <div class="category-header">
+
+            <div>
+                <span class="eyebrow">CLUB MESAVERSO</span>
+                <h1>Crea tu cuenta</h1>
+                <p>
+                    Regístrate para acumular recompensas y llevar el registro
+                    de los juegos que compras en nuestra tienda.
+                </p>
+            </div>
+
+            <span class="big-symbol" aria-hidden="true">♛</span>
+
+        </div>
+
+
+        <!-- ==================== FORMULARIO + BENEFICIOS ==================== -->
+        <!-- S2: rejilla Bootstrap. En escritorio el formulario ocupa 8 de 12 columnas
+             y el panel de beneficios 4; en celular y tablet quedan uno bajo el otro. -->
+        <section class="section row g-4" aria-labelledby="titulo-formulario">
+
+            <!-- ===== Formulario ===== -->
+            <div class="col-12 col-lg-8">
+                <div class="register-panel">
+
+                    <h2 id="titulo-formulario" class="section-label">FORMULARIO DE REGISTRO</h2>
+
+                    <p class="register-intro">
+                        Todos los campos son obligatorios, excepto la dirección de despacho.
+                    </p>
+
+                    <!-- novalidate: desactiva los avisos automáticos del navegador para que
+                         TODAS las validaciones las haga JavaScript (js/registro.js). -->
+                    <form id="formRegistro" novalidate>
+
+                        <div class="row g-3">
+
+                            <!-- Nombre completo -->
+                            <div class="col-12">
+                                <label for="nombre" class="form-label">Nombre completo *</label>
+                                <input id="nombre" name="nombre" type="text" class="form-control"
+                                       placeholder="Ej: Catalina Palma" autocomplete="name"
+                                       aria-describedby="error-nombre">
+                                <div id="error-nombre" class="invalid-feedback"></div>
+                            </div>
+
+                            <!-- Nombre de usuario -->
+                            <div class="col-12 col-md-6">
+                                <label for="usuario" class="form-label">Nombre de usuario *</label>
+                                <input id="usuario" name="usuario" type="text" class="form-control"
+                                       placeholder="Ej: cata_juega" autocomplete="username"
+                                       aria-describedby="error-usuario">
+                                <div id="error-usuario" class="invalid-feedback"></div>
+                            </div>
+
+                            <!-- Correo electrónico -->
+                            <div class="col-12 col-md-6">
+                                <label for="correo" class="form-label">Correo electrónico *</label>
+                                <input id="correo" name="correo" type="email" class="form-control"
+                                       placeholder="nombre@correo.cl" autocomplete="email"
+                                       aria-describedby="error-correo">
+                                <div id="error-correo" class="invalid-feedback"></div>
+                            </div>
+
+                            <!-- Contraseña (con botón para mostrar u ocultar) -->
+                            <div class="col-12 col-md-6">
+                                <label for="clave" class="form-label">Contraseña *</label>
+                                <div class="input-group has-validation">
+                                    <input id="clave" name="clave" type="password" class="form-control"
+                                           placeholder="Entre 6 y 18 caracteres" autocomplete="new-password"
+                                           aria-describedby="reglas-clave error-clave">
+                                    <!-- S2: JavaScript cambia el atributo type entre "password" y "text". -->
+                                    <button id="btnVerClave" class="btn btn-toggle-pass" type="button"
+                                            aria-label="Mostrar contraseña" aria-pressed="false">Ver</button>
+                                    <div id="error-clave" class="invalid-feedback"></div>
+                                </div>
+
+                                <!-- S2: lista de requisitos. JavaScript marca cada regla
+                                     como cumplida (clase "ok") mientras se escribe. -->
+                                <ul id="reglas-clave" class="pass-rules">
+                                    <li data-regla="largo">Entre 6 y 18 caracteres</li>
+                                    <li data-regla="mayuscula">Al menos una letra mayúscula</li>
+                                    <li data-regla="numero">Al menos un número</li>
+                                </ul>
+                            </div>
+
+                            <!-- Repetir contraseña -->
+                            <div class="col-12 col-md-6">
+                                <label for="clave2" class="form-label">Repetir contraseña *</label>
+                                <input id="clave2" name="clave2" type="password" class="form-control"
+                                       placeholder="Escribe la misma contraseña" autocomplete="new-password"
+                                       aria-describedby="error-clave2">
+                                <div id="error-clave2" class="invalid-feedback"></div>
+                            </div>
+
+                            <!-- Fecha de nacimiento -->
+                            <div class="col-12 col-md-6">
+                                <label for="nacimiento" class="form-label">Fecha de nacimiento *</label>
+                                <input id="nacimiento" name="nacimiento" type="date" class="form-control"
+                                       autocomplete="bday" aria-describedby="ayuda-nacimiento error-nacimiento">
+                                <div id="ayuda-nacimiento" class="form-text">Debes tener 13 años o más.</div>
+                                <div id="error-nacimiento" class="invalid-feedback"></div>
+                            </div>
+
+                            <!-- Dirección de despacho (OPCIONAL) -->
+                            <div class="col-12 col-md-6">
+                                <label for="direccion" class="form-label">
+                                    Dirección de despacho <span class="optional">(opcional)</span>
+                                </label>
+                                <input id="direccion" name="direccion" type="text" class="form-control"
+                                       placeholder="Calle, número, comuna" autocomplete="street-address">
+                            </div>
+
+                        </div>
+
+                        <!-- Botones: "submit" dispara la validación; "reset" limpia el formulario. -->
+                        <div class="form-buttons">
+                            <button type="submit" class="cta border-0">Registrarme</button>
+                            <button type="reset" class="cta cta-secondary">Limpiar formulario</button>
+                        </div>
+
+                        <!-- S2: JavaScript escribe aquí el resultado general del formulario. -->
+                        <div id="mensajeFormulario" class="form-status" role="status" aria-live="polite"></div>
+
+                    </form>
+
+                </div>
+            </div>
+
+
+            <!-- ===== Beneficios ===== -->
+            <aside class="col-12 col-lg-4" aria-label="Beneficios de registrarse">
+                <div class="benefits-panel">
+
+                    <span class="eyebrow">¿POR QUÉ REGISTRARTE?</span>
+
+                    <ul class="benefits-list">
+                        <li>
+                            <strong>Recompensas</strong>
+                            Mientras más compras, más beneficios acumulas.
+                        </li>
+                        <li>
+                            <strong>Tu historial de juegos</strong>
+                            Revisa qué juegos has comprado en MesaVerso.
+                        </li>
+                        <li>
+                            <strong>Ofertas primero</strong>
+                            Entérate antes que nadie de los descuentos.
+                        </li>
+                    </ul>
+
+                    <p class="benefits-note">
+                        Sitio académico: los datos solo se validan en tu navegador.
+                        No se guardan ni se envían a ningún servidor.
+                    </p>
+
+                </div>
+            </aside>
+
+        </section>
+
+    </main>
+
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="site-footer">
+
+        <div class="shell">
+
+            MESAVERSO © <span id="anio-actual">2026</span>
+
+            <span>
+                · Catálogo demostrativo para FullStack II
+                · Precios ficticios
+            </span>
+
+        </div>
+
+    </footer>
+
+    <!-- S2: Bootstrap JS. Solo hace funcionar el menú colapsable (botón ☰). -->
+    <script src="vendor/bootstrap.bundle.min.js"></script>
+
+    <!-- S2: JavaScript propio común a todas las páginas (menú activo, año del pie). -->
+    <script src="js/main.js"></script>
+
+    <!-- S2: validaciones del formulario de registro. -->
+    <script src="js/registro.js"></script>
+
+</body>
+</html>

@@ -1,5 +1,10 @@
 # MesaVerso 🎲
 
-Catálogo académico de juegos de mesa — FullStack II, Semana 1.
+Catálogo académico de juegos de mesa — FullStack II (DSY2202).
 
-Nombre: Catalina Palma 
+Nombre: Catalina Palma
+
+
+## Semana 2 — Adaptando nuestra interfaz gráfica
+
+

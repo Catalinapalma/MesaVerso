@@ -1,7 +1,7 @@
 
 /* ==========================================================
-   MESAVERSO — SEMANA 1
-   HTML5 + CSS3 | Sin JavaScript
+   MESAVERSO — SEMANA 1 Y 2
+   HTML5 + CSS3 (Semana 1) + Bootstrap 5 y JavaScript (Semana 2)
    ========================================================== */
 
 
@@ -753,4 +753,450 @@ main {
 
 .cta-secondary:hover {
     background: #3e607d;
+}
+
+
+/* ##########################################################
+   SEMANA 2 — BOOTSTRAP + JAVASCRIPT
+   Todo lo anterior (Semana 1) se conserva sin cambios.
+   Estas reglas adaptan los componentes de Bootstrap a los
+   colores y al estilo original de MesaVerso.
+   ########################################################## */
+
+
+/* ==================== S2 · NAVBAR BOOTSTRAP ==================== */
+
+.top-nav.navbar {
+    padding: 0;
+    position: sticky;          /* el menú queda visible al hacer scroll */
+    top: 0;
+    z-index: 1020;
+    transition: box-shadow .25s ease;
+}
+
+/* Clase agregada por js/main.js al bajar en la página */
+.top-nav.is-scrolled {
+    box-shadow: 0 8px 22px #05080ecc;
+}
+
+.top-nav .nav-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.top-nav .navbar-brand {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #d8e9f6;
+    padding: 12px 0;
+}
+
+.top-nav .navbar-toggler {
+    border-color: #6d93ae;
+    margin-block: 8px;
+}
+
+.top-nav .navbar-toggler:focus {
+    box-shadow: 0 0 0 3px #66c0f455;
+}
+
+/* Mismo aspecto que los enlaces de la Semana 1 */
+.top-nav .navbar-nav .nav-link {
+    padding: 15px 22px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    color: #d8e9f6;
+    border-bottom: 3px solid transparent;
+}
+
+.top-nav .navbar-nav .nav-link:hover {
+    background: #4d7793;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Clase "active" agregada por js/main.js a la página actual */
+.top-nav .navbar-nav .nav-link.active {
+    color: #fff;
+    background: #3c6584;
+    border-bottom-color: var(--accent);
+}
+
+/* Enlace REGISTRO destacado con el color de ofertas */
+.top-nav .navbar-nav .nav-register {
+    color: var(--offer);
+}
+
+.top-nav .navbar-nav .nav-register.active {
+    border-bottom-color: var(--offer);
+}
+
+
+/* ==================== S2 · REJILLA BOOTSTRAP ==================== */
+/* En S1 estas grillas usaban CSS Grid. Ahora las columnas las
+   controlan row / col-*, por eso se desactiva el display:grid. */
+
+.category-grid.row,
+.game-grid.row,
+.feature-layout.row {
+    display: flex;
+    grid-template-columns: none;
+    gap: 0;
+}
+
+.feature-layout.row {
+    margin-inline: 0;
+}
+
+/* El buscador oculta columnas con la propiedad hidden */
+.game-grid > [hidden] {
+    display: none !important;
+}
+
+
+/* ==================== S2 · BOTONES ==================== */
+
+button.cta {
+    cursor: pointer;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+button.cta-secondary {
+    color: #fff;
+}
+
+
+/* ==================== S2 · BUSCADOR DE JUEGOS ==================== */
+
+.catalog-search {
+    max-width: 520px;
+    margin-bottom: 22px;
+}
+
+.catalog-search .form-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    color: #e7f0f8;
+}
+
+.search-status {
+    margin: 8px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.search-status.empty {
+    color: #ffb4b4;
+    font-weight: 700;
+}
+
+
+/* ==================== S2 · CONTROLES DE FORMULARIO ==================== */
+
+.form-control {
+    background: #1a2636;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    border-radius: 3px;
+    padding: 10px 12px;
+}
+
+.form-control::placeholder {
+    color: #7891a6;
+}
+
+.form-control:focus {
+    background: #1d2c3f;
+    color: var(--ink);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px #66c0f440;
+}
+
+.form-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #d8e9f6;
+    margin-bottom: 6px;
+}
+
+.form-text {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.invalid-feedback {
+    color: #ff9b9b;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.form-control.is-invalid {
+    border-color: #ff6b6b;
+}
+
+.form-control.is-valid {
+    border-color: var(--offer);
+}
+
+
+/* ==================== S2 · PÁGINA DE REGISTRO ==================== */
+
+.register-panel,
+.benefits-panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    box-shadow: 0 12px 35px #070c1375;
+    padding: clamp(18px, 4vw, 32px);
+    height: 100%;
+}
+
+.register-intro {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 22px;
+}
+
+.optional {
+    font-weight: 400;
+    color: var(--muted);
+}
+
+/* Botón "Ver / Ocultar" contraseña */
+.btn-toggle-pass {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 76px;
+}
+
+.btn-toggle-pass:hover {
+    background: var(--nav);
+    color: #fff;
+}
+
+/* Lista de requisitos de la contraseña */
+.pass-rules {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.pass-rules li::before {
+    content: "✗ ";
+    color: #ff9b9b;
+    font-weight: 800;
+}
+
+/* Clase "ok" agregada por js/registro.js cuando la regla se cumple */
+.pass-rules li.ok {
+    color: var(--offer);
+}
+
+.pass-rules li.ok::before {
+    content: "✓ ";
+    color: var(--offer);
+}
+
+.form-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+/* Mensaje general creado por JavaScript */
+.form-status {
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.form-status:empty {
+    display: none;
+}
+
+.form-status.exito,
+.form-status.error {
+    padding: 13px 16px;
+    border-left: 4px solid;
+    animation: slideUp .4s ease-out both;
+}
+
+.form-status.exito {
+    background: #2b3b16;
+    color: #d6f28a;
+    border-color: var(--offer);
+}
+
+.form-status.error {
+    background: #3e1f27;
+    color: #ffc2c2;
+    border-color: #ff6b6b;
+}
+
+/* Panel de beneficios */
+.benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 14px 0 20px;
+    display: grid;
+    gap: 16px;
+}
+
+.benefits-list li {
+    border-left: 3px solid var(--accent);
+    padding-left: 12px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.benefits-list strong {
+    display: block;
+    color: #fff;
+    font-size: 15px;
+}
+
+.benefits-note {
+    font-size: 11px;
+    color: #8eacbf;
+    margin: 0;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+}
+
+
+/* ==================== S2 · PORTADA: ¿QUÉ JUGAMOS HOY? ==================== */
+
+#zonaSugerencia {
+    margin-top: 16px;
+}
+
+/* Tarjeta creada con createElement() en js/inicio.js */
+.suggestion-card {
+    display: flex;
+    background: var(--panel-2);
+    border: 1px solid var(--accent);
+    box-shadow: 0 5px 22px #060a1055;
+    max-width: 760px;
+    overflow: hidden;
+    animation: slideUp .45s ease-out both;
+}
+
+.suggestion-card img {
+    width: 42%;
+    object-fit: cover;
+}
+
+.suggestion-info {
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+.suggestion-info h3 {
+    margin: 0;
+    font-size: 26px;
+}
+
+.suggestion-info p {
+    margin: 0;
+    color: var(--muted);
+}
+
+
+/* ==================== S2 · PORTADA: INVITACIÓN AL REGISTRO ==================== */
+
+.join-banner {
+    background: linear-gradient(120deg, #284660, #1b2839);
+    border: 1px solid var(--line);
+    border-bottom: 3px solid var(--offer);
+    padding: 24px 28px;
+}
+
+.join-banner h2 {
+    font-size: 26px;
+    margin: 4px 0 6px;
+}
+
+.join-banner p {
+    color: var(--muted);
+    margin: 0;
+}
+
+.join-banner .cta {
+    display: inline-block;
+}
+
+
+/* ==================== S2 · RESPONSIVIDAD ==================== */
+
+/* Menú desplegado en celular/tablet (menos de 768 px) */
+@media (max-width: 767.98px) {
+
+    .top-nav .navbar-collapse {
+        padding-bottom: 10px;
+    }
+
+    .top-nav .navbar-nav .nav-link {
+        padding: 11px 14px;
+        border-bottom: 0;
+        border-left: 3px solid transparent;
+    }
+
+    .top-nav .navbar-nav .nav-link.active {
+        border-left-color: var(--accent);
+    }
+
+    .top-nav .navbar-nav .nav-register.active {
+        border-left-color: var(--offer);
+    }
+
+    .feature-image {
+        height: 240px;
+    }
+}
+
+/* Celulares */
+@media (max-width: 575.98px) {
+
+    .suggestion-card {
+        flex-direction: column;
+    }
+
+    .suggestion-card img {
+        width: 100%;
+        height: 170px;
+    }
+
+    .form-buttons .cta {
+        width: 100%;
+        text-align: center;
+    }
+
+    .join-banner {
+        padding: 20px;
+    }
+
+    .join-banner .cta {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* S2: el año (span creado para JavaScript) debe quedar en la misma línea */
+.site-footer #anio-actual {
+    display: inline;
+    margin: 0;
 }
