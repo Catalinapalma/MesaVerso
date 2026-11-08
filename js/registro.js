@@ -1,5 +1,5 @@
 /* ==========================================================
-   MESAVERSO — SEMANA 2
+   MESAVERSO — SEMANA 2 (actualizado en SEMANA 3)
    js/registro.js · Validaciones del formulario de registro
 
    Reglas pedidas por el cliente:
@@ -11,8 +11,15 @@
    6. La persona debe tener 13 años o más.
    7. La dirección de despacho es opcional.
 
-   Nota: el formulario NO guarda ni envía datos; solo valida
-   en el navegador (sitio académico).
+   CAMBIOS DE LA SEMANA 3 (según el feedback de la Semana 2):
+   - Las REGLAS ahora están en js/validaciones-s3.js y se reutilizan
+     en login, recuperar, perfil, carrito y administración.
+     Este archivo se queda con la PRESENTACIÓN y los eventos.
+   - Se agregó una 5.ª regla de contraseña: un carácter especial.
+   - Se valida que el correo y el usuario no estén ya registrados.
+   - Los datos validados se reúnen en un objeto (datosRegistro) y se
+     guardan como ficha de cliente y de usuario en localStorage.
+     La contraseña NUNCA se guarda.
    ========================================================== */
 
 
@@ -35,57 +42,18 @@ const inputs = {
 
 const direccion = document.getElementById("direccion");
 
-const EDAD_MINIMA = 13;
 
 
 /* ==================== 2. FUNCIONES DE APOYO ==================== */
+// S3: las funciones estaVacio, esCorreoValido, revisarClave, calcularEdad
+// y fechaHoyTexto se trasladaron a js/validaciones-s3.js (objeto Validaciones)
+// para poder reutilizarlas en todos los formularios del sitio.
 
-// Devuelve true si el texto está vacío o solo tiene espacios
-function estaVacio(valor) {
-    return valor.trim() === "";
-}
-
-// Formato de email: texto@texto.dominio (sin espacios)
-function esCorreoValido(correo) {
-    const patron = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
-    return patron.test(correo.trim());
-}
-
-// Revisa cada regla de la contraseña por separado
-function revisarClave(clave) {
-    return {
-        largo: clave.length >= 6 && clave.length <= 18,
-        mayuscula: /[A-ZÑ]/.test(clave),
-        numero: /[0-9]/.test(clave)
-    };
-}
-
-// Calcula la edad en años cumplidos a partir de "aaaa-mm-dd"
-function calcularEdad(fechaTexto) {
-    const [anio, mes, dia] = fechaTexto.split("-").map(Number);
-    const nacimiento = new Date(anio, mes - 1, dia);
-    const hoy = new Date();
-
-    let edad = hoy.getFullYear() - nacimiento.getFullYear();
-
-    // Si todavía no llega su cumpleaños este año, se resta 1
-    const yaCumplio =
-        hoy.getMonth() > nacimiento.getMonth() ||
-        (hoy.getMonth() === nacimiento.getMonth() && hoy.getDate() >= nacimiento.getDate());
-
-    if (!yaCumplio) {
-        edad--;
-    }
-
-    return edad;
-}
-
-// Fecha de hoy en formato "aaaa-mm-dd" (para el atributo max del input date)
-function fechaHoyTexto() {
-    const hoy = new Date();
-    const mes = String(hoy.getMonth() + 1).padStart(2, "0");
-    const dia = String(hoy.getDate()).padStart(2, "0");
-    return `${hoy.getFullYear()}-${mes}-${dia}`;
+// Devuelve true si ya existe una ficha con ese valor (correo o usuario)
+function yaRegistrado(propiedad, valor) {
+    return MV.usuarios().some(function (usuario) {
+        return String(usuario[propiedad]).toLowerCase() === valor.trim().toLowerCase();
+    });
 }
 
 
@@ -94,47 +62,50 @@ function fechaHoyTexto() {
 
 const validadores = {
 
+    // S3: además de las reglas S2, el nombre solo admite letras
     nombre(valor) {
-        if (estaVacio(valor)) return "Ingresa tu nombre completo.";
-        return "";
+        return Validaciones.validarNombre(valor);
     },
 
+    // S3: el usuario no puede estar ocupado por otra ficha
     usuario(valor) {
-        if (estaVacio(valor)) return "Ingresa un nombre de usuario.";
-        if (/\s/.test(valor.trim())) return "El nombre de usuario no puede tener espacios.";
+        const error = Validaciones.validarUsuario(valor);
+        if (error) return error;
+        if (yaRegistrado("usuario", valor)) return "Ese nombre de usuario ya está registrado.";
         return "";
     },
 
+    // S3: el correo no puede estar registrado
     correo(valor) {
-        if (estaVacio(valor)) return "Ingresa tu correo electrónico.";
-        if (!esCorreoValido(valor)) return "El correo no tiene un formato válido (ej: nombre@correo.cl).";
+        const error = Validaciones.validarCorreo(valor);
+        if (error) return error;
+        if (yaRegistrado("correo", valor)) return "Ya existe una cuenta con ese correo.";
         return "";
     },
 
     clave(valor) {
-        if (valor === "") return "Ingresa una contraseña.";
-        const reglas = revisarClave(valor);
-        if (!reglas.largo) return "La contraseña debe tener entre 6 y 18 caracteres.";
-        if (!reglas.mayuscula) return "La contraseña debe tener al menos una letra mayúscula.";
-        if (!reglas.numero) return "La contraseña debe tener al menos un número.";
-        return "";
+        return Validaciones.validarClave(valor);
     },
 
     clave2(valor) {
-        if (valor === "") return "Repite tu contraseña.";
-        if (valor !== inputs.clave.value) return "Las contraseñas no coinciden.";
-        return "";
+        return Validaciones.validarRepeticion(valor, inputs.clave.value);
     },
 
     nacimiento(valor) {
-        if (valor === "") return "Ingresa tu fecha de nacimiento.";
-        const edad = calcularEdad(valor);
-        if (Number.isNaN(edad)) return "La fecha no es válida.";
-        if (edad < 0) return "La fecha de nacimiento no puede ser futura.";
-        if (edad < EDAD_MINIMA) return `Debes tener al menos ${EDAD_MINIMA} años para registrarte.`;
-        return "";
+        return Validaciones.validarNacimiento(valor);
     }
 };
+
+// S3: la dirección es opcional, pero si se escribe debe tener un largo razonable
+function validarDireccionOpcional() {
+    const error = Validaciones.validarDireccion(direccion.value, false);
+    const cajaError = document.getElementById("error-direccion");
+
+    direccion.classList.toggle("is-invalid", error !== "");
+    direccion.classList.toggle("is-valid", error === "" && !Validaciones.estaVacio(direccion.value));
+    cajaError.textContent = error;
+    return error === "";
+}
 
 
 /* ==================== 4. MOSTRAR RESULTADO EN PANTALLA ==================== */
@@ -166,11 +137,12 @@ function validarCampo(nombreCampo) {
 
 // Marca en verde las reglas de la contraseña que ya se cumplen
 function actualizarReglasClave() {
-    const estado = revisarClave(inputs.clave.value);
+    const estado = Validaciones.revisarClave(inputs.clave.value);
 
     reglasClave.forEach(function (item) {
         const regla = item.dataset.regla;
-        item.classList.toggle("ok", estado[regla]);
+        // "maximo" se marca solo cuando ya se escribió algo
+        item.classList.toggle("ok", estado[regla] && inputs.clave.value.length > 0);
     });
 }
 
@@ -185,17 +157,58 @@ function limpiarMensaje() {
 }
 
 
+/* ==================== 4.1 S3 · DATOS VALIDADOS ==================== */
+
+// Reúne los datos ya validados en un solo objeto. La contraseña NO se incluye.
+function obtenerDatosRegistro() {
+    return {
+        nombre: inputs.nombre.value.trim(),
+        usuario: inputs.usuario.value.trim(),
+        correo: inputs.correo.value.trim().toLowerCase(),
+        nacimiento: inputs.nacimiento.value,
+        direccion: direccion.value.trim()
+    };
+}
+
+// Guarda la persona como ficha de usuario (rol cliente) y como ficha de cliente.
+function guardarRegistro(datos) {
+    const usuarios = MV.usuarios();
+    usuarios.push({
+        id: MV.siguienteId(usuarios),
+        nombre: datos.nombre,
+        usuario: datos.usuario,
+        correo: datos.correo,
+        rol: "cliente"
+    });
+    MV.guardar("usuarios", usuarios);
+
+    const clientes = MV.clientes();
+    clientes.push({
+        id: MV.siguienteId(clientes),
+        nombre: datos.nombre,
+        correo: datos.correo,
+        telefono: "",
+        direccion: datos.direccion
+    });
+    MV.guardar("clientes", clientes);
+}
+
+
 /* ==================== 5. EVENTOS ==================== */
 
 // 5.1 Al cargar: la fecha de nacimiento no puede ser posterior a hoy
-inputs.nacimiento.setAttribute("max", fechaHoyTexto());
+inputs.nacimiento.setAttribute("max", Validaciones.fechaHoyTexto());
 
 // 5.2 Validación en vivo: al salir del campo (blur) se valida por primera vez;
 //     desde ahí, se vuelve a validar mientras la persona escribe (input).
 Object.keys(inputs).forEach(function (nombreCampo) {
     const input = inputs[nombreCampo];
 
-    input.addEventListener("blur", function () {
+    input.addEventListener("blur", function (evento) {
+        // S3: si el foco pasa al botón "Registrarme" no se valida aquí, porque el
+        // mensaje de error movería el botón y el clic se perdería (submit valida todo).
+        if (evento.relatedTarget && evento.relatedTarget.type === "submit") return;
+
         input.dataset.revisado = "si";
         validarCampo(nombreCampo);
     });
@@ -206,6 +219,9 @@ Object.keys(inputs).forEach(function (nombreCampo) {
         }
     });
 });
+
+// 5.2.1 S3: la dirección (opcional) también se valida al salir del campo
+direccion.addEventListener("blur", validarDireccionOpcional);
 
 // 5.3 Si cambia la contraseña: se actualiza la lista de reglas y,
 //     si ya se escribió la repetición, se vuelve a comparar.
@@ -244,16 +260,21 @@ form.addEventListener("submit", function (evento) {
         }
     });
 
-    // La dirección es opcional: no se valida, solo se marca si fue escrita
-    if (!estaVacio(direccion.value)) {
-        direccion.classList.add("is-valid");
+    // La dirección es opcional: solo se valida si fue escrita (S3)
+    if (!validarDireccionOpcional()) {
+        todoCorrecto = false;
+        if (primerError === null) primerError = direccion;
     }
 
     if (todoCorrecto) {
-        const usuario = inputs.usuario.value.trim();
+        // S3: los datos validados quedan separados en un objeto (sin la contraseña)
+        const datosRegistro = obtenerDatosRegistro();
+        guardarRegistro(datosRegistro);
+
         mostrarMensaje(
-            `¡Registro validado, ${usuario}! Bienvenida/o al Club MesaVerso. ` +
-            "(Sitio académico: los datos no se guardan.)",
+            `¡Registro exitoso, ${datosRegistro.usuario}! Bienvenida/o al Club MesaVerso. ` +
+            "Tu ficha quedó guardada en este navegador (el administrador la ve en su panel). " +
+            "Para probar las compras, inicia sesión con la cuenta de prueba cliente@mesaverso.cl.",
             "exito"
         );
     } else {
@@ -272,7 +293,8 @@ form.addEventListener("reset", function () {
         document.getElementById("error-" + input.id).textContent = "";
     });
 
-    direccion.classList.remove("is-valid");
+    direccion.classList.remove("is-valid", "is-invalid");
+    document.getElementById("error-direccion").textContent = "";
 
     // Volver a ocultar la contraseña
     inputs.clave.type = "password";

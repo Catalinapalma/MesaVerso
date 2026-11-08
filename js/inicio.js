@@ -1,5 +1,5 @@
 /* ==========================================================
-   MESAVERSO — SEMANA 2
+   MESAVERSO — SEMANA 2 (actualizado en SEMANA 3)
    js/inicio.js · "¿Qué jugamos hoy?" (solo en index.html)
 
    Al presionar el botón se CREA una tarjeta con un juego al azar
@@ -9,21 +9,22 @@
 
 
 /* ==================== 1. DATOS: JUEGOS DEL CATÁLOGO ==================== */
+// S3: antes los 12 juegos estaban escritos aquí. Ahora se leen de
+// js/datos-s3.js, así la sugerencia incluye los juegos que agrega
+// el administrador y no muestra los que elimina o están agotados.
+// map() transforma cada producto al formato que usaba la Semana 2.
 
-const juegos = [
-    { nombre: "Catan",           categoria: "Estrategia",   pagina: "estrategia.html",   imagen: "img/catan.png",       texto: "Comercia, construye y desarrolla asentamientos." },
-    { nombre: "Ticket to Ride",  categoria: "Estrategia",   pagina: "estrategia.html",   imagen: "img/ticket.png",      texto: "Conecta ciudades y completa rutas ferroviarias." },
-    { nombre: "Ajedrez Clásico", categoria: "Estrategia",   pagina: "estrategia.html",   imagen: "img/ajedrez.png",     texto: "Anticipa cada movimiento para lograr el jaque mate." },
-    { nombre: "Dixit",           categoria: "Familiares",   pagina: "familiares.html",   imagen: "img/dixit.png",       texto: "Imaginación y pistas para toda la familia." },
-    { nombre: "Carcassonne",     categoria: "Familiares",   pagina: "familiares.html",   imagen: "img/carcassonne.png", texto: "Crea paisajes y suma puntos con tus fichas." },
-    { nombre: "Aventureros",     categoria: "Familiares",   pagina: "familiares.html",   imagen: "img/aventureros.png", texto: "Explora caminos y cumple desafíos en grupo." },
-    { nombre: "UNO",             categoria: "Cartas",       pagina: "cartas.html",       imagen: "img/uno.png",         texto: "Descarta tus cartas antes que los demás." },
-    { nombre: "Dobble",          categoria: "Cartas",       pagina: "cartas.html",       imagen: "img/dobble.png",      texto: "Encuentra el símbolo repetido contra el reloj." },
-    { nombre: "Virus!",          categoria: "Cartas",       pagina: "cartas.html",       imagen: "img/virus.png",       texto: "Reúne órganos sanos y evita contagios." },
-    { nombre: "Pandemic",        categoria: "Cooperativos", pagina: "cooperativos.html", imagen: "img/pandemic.png",    texto: "Colaboren para detener brotes por el mundo." },
-    { nombre: "Just One",        categoria: "Cooperativos", pagina: "cooperativos.html", imagen: "img/justone.png",     texto: "Den pistas únicas para adivinar palabras." },
-    { nombre: "La misión azul",  categoria: "Cooperativos", pagina: "cooperativos.html", imagen: "img/azul.png",        texto: "Resuelvan juntos desafíos por turnos." }
-];
+const juegos = MV.productos()
+    .filter(function (producto) { return producto.stock > 0; })
+    .map(function (producto) {
+        return {
+            nombre: producto.nombre,
+            categoria: producto.categoria,
+            pagina: producto.categoria.toLowerCase() + ".html",
+            imagen: producto.imagen,
+            texto: producto.descripcion
+        };
+    });
 
 
 /* ==================== 2. ELEMENTOS DEL DOM ==================== */
@@ -38,6 +39,9 @@ let ultimoIndice = -1; // para no repetir el mismo juego dos veces seguidas
 /* ==================== 3. FUNCIONES ==================== */
 
 function elegirJuegoAlAzar() {
+    // S3: con un solo juego disponible no se puede evitar repetirlo
+    if (juegos.length === 1) return juegos[0];
+
     let indice;
     do {
         indice = Math.floor(Math.random() * juegos.length);
@@ -90,6 +94,12 @@ function quitarSugerencia() {
 /* ==================== 4. EVENTOS ==================== */
 
 btnSugerir.addEventListener("click", function () {
+    // S3: si el administrador dejó todo sin stock, no hay nada que sugerir
+    if (juegos.length === 0) {
+        btnSugerir.textContent = "Sin juegos disponibles por ahora";
+        return;
+    }
+
     quitarSugerencia();                              // elimina la anterior (si hay)
     zonaSugerencia.append(crearTarjeta(elegirJuegoAlAzar()));
 

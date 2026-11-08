@@ -12,14 +12,20 @@
 
     <title>Cartas | MesaVerso</title>
 
+    <!-- S3: ícono de la pestaña (evita el error 404 de favicon.ico en la consola). -->
+    <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
     <!-- S2: Bootstrap 5.3.6 guardado en vendor/ (funciona sin conexión a internet). -->
     <link rel="stylesheet" href="vendor/bootstrap.min.css">
 
     <!-- S1: estilos propios. Se cargan DESPUÉS de Bootstrap para conservar el diseño de MesaVerso. -->
     <link rel="stylesheet" href="css/styles.css">
+
+    <!-- S3: estilos agregados en la Semana 3 (menú por rol, stock, carrito...). -->
+    <link rel="stylesheet" href="css/s3.css">
 </head>
 
-<body>
+<body data-categoria="Cartas">
 
     <!-- ==================== HEADER ==================== -->
     <header class="site-header">
@@ -49,12 +55,15 @@
 
 
     <!-- ==================== NAVEGACIÓN ==================== -->
-    <!-- S2: navbar de Bootstrap. En pantallas pequeñas el menú se oculta tras el botón ☰. -->
-    <nav class="navbar navbar-expand-md top-nav" aria-label="Navegación principal" data-bs-theme="dark">
+    <!-- S2: navbar de Bootstrap. En pantallas pequeñas el menú se oculta tras el botón ☰.
+         S3: se cambia a navbar-expand-lg porque el menú tiene más opciones.
+         Cada opción de la derecha tiene data-rol: js/sesion-s3.js la muestra
+         u oculta según quién inició sesión (invitado, cliente o administrador). -->
+    <nav class="navbar navbar-expand-lg top-nav" aria-label="Navegación principal" data-bs-theme="dark">
 
         <div class="shell nav-inner">
 
-            <span class="navbar-brand d-md-none">MENÚ</span>
+            <span class="navbar-brand d-lg-none">MENÚ</span>
 
             <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
@@ -70,7 +79,25 @@
                     <li class="nav-item"><a class="nav-link" href="ofertas.html">OFERTAS</a></li>
                 </ul>
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link nav-register" href="registro.html">REGISTRO</a></li>
+                    <!-- Invitado: aún no inicia sesión -->
+                    <li class="nav-item" data-rol="invitado"><a class="nav-link" href="login.html">INGRESAR</a></li>
+                    <li class="nav-item" data-rol="invitado"><a class="nav-link nav-register" href="registro.html">REGISTRO</a></li>
+
+                    <!-- Cliente: compra y revisa sus pedidos -->
+                    <li class="nav-item" data-rol="cliente" hidden>
+                        <a class="nav-link" href="carrito.html">CARRITO<span id="contadorCarrito" class="nav-cart-count">0</span></a>
+                    </li>
+                    <li class="nav-item" data-rol="cliente" hidden><a class="nav-link" href="historial.html">MIS COMPRAS</a></li>
+
+                    <!-- Administrador: gestiona productos, inventario y usuarios -->
+                    <li class="nav-item" data-rol="administrador" hidden><a class="nav-link nav-register" href="admin.html">ADMINISTRAR</a></li>
+
+                    <!-- Cualquier sesión iniciada -->
+                    <li class="nav-item" data-rol="sesion" hidden><a class="nav-link" href="perfil.html">PERFIL</a></li>
+                    <li class="nav-item nav-session" data-rol="sesion" hidden>
+                        <span id="sesionActual" class="nav-session-name"></span>
+                        <button id="cerrarSesion" class="btn-logout" type="button">SALIR</button>
+                    </li>
                 </ul>
             </div>
 
@@ -324,11 +351,18 @@
     <!-- S2: Bootstrap JS. Solo hace funcionar el menú colapsable (botón ☰). -->
     <script src="vendor/bootstrap.bundle.min.js"></script>
 
+    <!-- S3: datos ficticios y menú según el rol. Deben ir ANTES que los demás archivos propios. -->
+    <script src="js/datos-s3.js"></script>
+    <script src="js/sesion-s3.js"></script>
+
     <!-- S2: JavaScript propio común a todas las páginas (menú activo, año del pie). -->
     <script src="js/main.js"></script>
 
     <!-- S2: buscador de juegos de esta página. -->
     <script src="js/catalogo.js"></script>
+
+    <!-- S3: conecta las fichas con los datos, muestra el stock y el botón de compra. -->
+    <script src="js/catalogo-s3.js"></script>
 
 </body>
 </html>

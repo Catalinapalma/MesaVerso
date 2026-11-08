@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+        name="description"
+        content="Panel de administración de MesaVerso."
+    >
+
+    <title>Administración | MesaVerso</title>
+
+    <!-- S3: ícono de la pestaña (evita el error 404 de favicon.ico en la consola). -->
+    <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+    <!-- S2: Bootstrap 5.3.6 guardado en vendor/ (funciona sin conexión a internet). -->
+    <link rel="stylesheet" href="vendor/bootstrap.min.css">
+
+    <!-- S1: estilos propios. Se cargan DESPUÉS de Bootstrap para conservar el diseño de MesaVerso. -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- S3: estilos de las pantallas nuevas (login, carrito, administración...). -->
+    <link rel="stylesheet" href="css/s3.css">
+</head>
+
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="site-header">
+
+        <div class="shell header-inner">
+
+            <a
+                class="brand"
+                href="index.html"
+                aria-label="MesaVerso, ir al inicio"
+            >
+                <span class="logo-mark" aria-hidden="true">⚄</span>
+
+                <span>
+                    MESAVERSO
+                    <small>Tu universo de juegos de mesa</small>
+                </span>
+            </a>
+
+            <span class="header-aside d-none d-md-inline">
+                UNA MESA. MIL AVENTURAS.
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- ==================== NAVEGACIÓN ==================== -->
+    <!-- S2: navbar de Bootstrap. En pantallas pequeñas el menú se oculta tras el botón ☰.
+         S3: se cambia a navbar-expand-lg porque el menú tiene más opciones.
+         Cada opción de la derecha tiene data-rol: js/sesion-s3.js la muestra
+         u oculta según quién inició sesión (invitado, cliente o administrador). -->
+    <nav class="navbar navbar-expand-lg top-nav" aria-label="Navegación principal" data-bs-theme="dark">
+
+        <div class="shell nav-inner">
+
+            <span class="navbar-brand d-lg-none">MENÚ</span>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                    aria-controls="menuPrincipal" aria-expanded="false"
+                    aria-label="Abrir o cerrar el menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">TIENDA</a></li>
+                    <li class="nav-item"><a class="nav-link" href="categorias.html">CATEGORÍAS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ofertas.html">OFERTAS</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- Invitado: aún no inicia sesión -->
+                    <li class="nav-item" data-rol="invitado"><a class="nav-link" href="login.html">INGRESAR</a></li>
+                    <li class="nav-item" data-rol="invitado"><a class="nav-link nav-register" href="registro.html">REGISTRO</a></li>
+
+                    <!-- Cliente: compra y revisa sus pedidos -->
+                    <li class="nav-item" data-rol="cliente" hidden>
+                        <a class="nav-link" href="carrito.html">CARRITO<span id="contadorCarrito" class="nav-cart-count">0</span></a>
+                    </li>
+                    <li class="nav-item" data-rol="cliente" hidden><a class="nav-link" href="historial.html">MIS COMPRAS</a></li>
+
+                    <!-- Administrador: gestiona productos, inventario y usuarios -->
+                    <li class="nav-item" data-rol="administrador" hidden><a class="nav-link nav-register" href="admin.html">ADMINISTRAR</a></li>
+
+                    <!-- Cualquier sesión iniciada -->
+                    <li class="nav-item" data-rol="sesion" hidden><a class="nav-link" href="perfil.html">PERFIL</a></li>
+                    <li class="nav-item nav-session" data-rol="sesion" hidden>
+                        <span id="sesionActual" class="nav-session-name"></span>
+                        <button id="cerrarSesion" class="btn-logout" type="button">SALIR</button>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <main id="contenido" class="shell">
+
+        <!-- ==================== RUTA DE NAVEGACIÓN ==================== -->
+        <p class="breadcrumb">
+            <a href="index.html">Tienda</a>
+            <span aria-hidden="true">›</span>
+            Administración
+        </p>
+
+
+        <!-- ==================== ENCABEZADO ==================== -->
+        <div class="category-header">
+
+            <div>
+                <span class="eyebrow">PANEL DEL ADMINISTRADOR</span>
+                <h1>Administración</h1>
+                <p>
+                    Gestiona productos, inventario, clientes, usuarios y pedidos de MesaVerso.
+                </p>
+            </div>
+
+            <span class="big-symbol" aria-hidden="true">♛</span>
+
+        </div>
+
+
+        <!-- ==================== RESUMEN DEL INVENTARIO ==================== -->
+        <!-- S3: 2 columnas en celular, 3 en tablet y 5 en escritorio (col-lg). -->
+        <section class="section" aria-label="Resumen">
+            <div class="row g-3">
+                <div class="col-6 col-md-4 col-lg">
+                    <div class="stat-card"><span>Productos</span><strong id="statProductos">0</strong></div>
+                </div>
+                <div class="col-6 col-md-4 col-lg">
+                    <div class="stat-card"><span>Unidades en stock</span><strong id="statUnidades">0</strong></div>
+                </div>
+                <div class="col-6 col-md-4 col-lg">
+                    <div class="stat-card alerta"><span>Stock bajo / agotado</span><strong id="statBajo">0</strong></div>
+                </div>
+                <div class="col-6 col-md-6 col-lg">
+                    <div class="stat-card"><span>Pedidos</span><strong id="statPedidos">0</strong></div>
+                </div>
+                <div class="col-12 col-md-6 col-lg">
+                    <div class="stat-card"><span>Ventas (simuladas)</span><strong id="statVentas">$0</strong></div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Mensaje general del panel (lo escribe js/admin-s3.js) -->
+        <div id="mensajeAdmin" class="form-status" role="status" aria-live="polite"></div>
+
+
+        <!-- ==================== PESTAÑAS ==================== -->
+        <!-- S3: pestañas de Bootstrap (data-bs-toggle="tab"). Cada una es un mantenedor. -->
+        <ul class="nav nav-tabs admin-tabs mt-4" id="pestanasAdmin" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tab-productos" data-bs-toggle="tab" data-bs-target="#panel-productos"
+                        type="button" role="tab" aria-controls="panel-productos" aria-selected="true">PRODUCTOS E INVENTARIO</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-clientes" data-bs-toggle="tab" data-bs-target="#panel-clientes"
+                        type="button" role="tab" aria-controls="panel-clientes" aria-selected="false">CLIENTES</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-usuarios" data-bs-toggle="tab" data-bs-target="#panel-usuarios"
+                        type="button" role="tab" aria-controls="panel-usuarios" aria-selected="false">USUARIOS</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-pedidos" data-bs-toggle="tab" data-bs-target="#panel-pedidos"
+                        type="button" role="tab" aria-controls="panel-pedidos" aria-selected="false">PEDIDOS</button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+
+            <!-- ==================== 1. PRODUCTOS E INVENTARIO ==================== -->
+            <section class="tab-pane fade show active" id="panel-productos" role="tabpanel" aria-labelledby="tab-productos">
+                <div class="register-panel">
+
+                    <h2 id="tituloFormProducto" class="section-label">AGREGAR PRODUCTO</h2>
+
+                    <form id="formProducto" novalidate>
+
+                        <!-- Campo oculto: vacío = producto nuevo; con número = edición -->
+                        <input id="prodId" type="hidden">
+
+                        <div class="row g-3">
+
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <label for="prodNombre" class="form-label">Nombre del juego *</label>
+                                <input id="prodNombre" type="text" class="form-control" maxlength="40"
+                                       aria-describedby="error-prodNombre">
+                                <div id="error-prodNombre" class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <label for="prodCategoria" class="form-label">Categoría *</label>
+                                <select id="prodCategoria" class="form-select" aria-describedby="error-prodCategoria">
+                                    <option value="">Selecciona una categoría</option>
+                                    <option>Estrategia</option>
+                                    <option>Familiares</option>
+                                    <option>Cartas</option>
+                                    <option>Cooperativos</option>
+                                </select>
+                                <div id="error-prodCategoria" class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <label for="prodImagen" class="form-label">Imagen *</label>
+                                <select id="prodImagen" class="form-select" aria-describedby="error-prodImagen">
+                                    <option value="">Selecciona una imagen</option>
+                                        <option value="img/ajedrez.png">ajedrez.png</option>
+                                        <option value="img/aventureros.png">aventureros.png</option>
+                                        <option value="img/azul.png">azul.png</option>
+                                        <option value="img/carcassonne.png">carcassonne.png</option>
+                                        <option value="img/catan.png">catan.png</option>
+                                        <option value="img/dixit.png">dixit.png</option>
+                                        <option value="img/dobble.png">dobble.png</option>
+                                        <option value="img/justone.png">justone.png</option>
+                                        <option value="img/pandemic.png">pandemic.png</option>
+                                        <option value="img/ticket.png">ticket.png</option>
+                                        <option value="img/uno.png">uno.png</option>
+                                        <option value="img/virus.png">virus.png</option>
+                                </select>
+                                <div id="error-prodImagen" class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <label for="prodPrecio" class="form-label">Precio normal (CLP) *</label>
+                                <input id="prodPrecio" type="number" min="1000" step="1" class="form-control"
+                                       aria-describedby="error-prodPrecio">
+                                <div id="error-prodPrecio" class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <label for="prodOferta" class="form-label">
+                                    Precio oferta <span class="optional">(opcional)</span>
+                                </label>
+                                <input id="prodOferta" type="number" min="1" step="1" class="form-control"
+                                       aria-describedby="ayuda-prodOferta error-prodOferta">
+                                <div id="ayuda-prodOferta" class="form-text">Si lo completas, el juego aparece en OFERTAS.</div>
+                                <div id="error-prodOferta" class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <label for="prodStock" class="form-label">Stock (unidades) *</label>
+                                <input id="prodStock" type="number" min="0" step="1" class="form-control"
+                                       aria-describedby="error-prodStock">
+                                <div id="error-prodStock" class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="prodDescripcion" class="form-label">Descripción *</label>
+                                <textarea id="prodDescripcion" rows="2" class="form-control" maxlength="120"
+                                          aria-describedby="error-prodDescripcion"></textarea>
+                                <div id="error-prodDescripcion" class="invalid-feedback"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="submit" class="cta border-0">Guardar producto</button>
+                            <button type="reset" class="cta cta-secondary">Cancelar / limpiar</button>
+                        </div>
+
+                    </form>
+
+
+                    <!-- Tabla de productos. Los botones − y + ajustan el inventario. -->
+                    <div class="catalog-search mt-4" role="search">
+                        <label for="buscarProducto" class="form-label">Buscar producto</label>
+                        <input id="buscarProducto" type="search" class="form-control" placeholder="Nombre o categoría">
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="mv-table">
+                            <caption>Productos e inventario</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Categoría</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Oferta</th>
+                                    <th scope="col">Stock</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaProductos"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <!-- ==================== 2. CLIENTES ==================== -->
+            <section class="tab-pane fade" id="panel-clientes" role="tabpanel" aria-labelledby="tab-clientes">
+                <div class="register-panel">
+
+                    <h2 id="tituloFormCliente" class="section-label">AGREGAR CLIENTE</h2>
+
+                    <form id="formCliente" novalidate>
+                        <input id="cliId" type="hidden">
+
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label for="cliNombre" class="form-label">Nombre completo *</label>
+                                <input id="cliNombre" type="text" class="form-control" aria-describedby="error-cliNombre">
+                                <div id="error-cliNombre" class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="cliCorreo" class="form-label">Correo *</label>
+                                <input id="cliCorreo" type="email" class="form-control" aria-describedby="error-cliCorreo">
+                                <div id="error-cliCorreo" class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="cliTelefono" class="form-label">Teléfono <span class="optional">(opcional)</span></label>
+                                <input id="cliTelefono" type="tel" class="form-control" placeholder="+56912345678"
+                                       aria-describedby="error-cliTelefono">
+                                <div id="error-cliTelefono" class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="cliDireccion" class="form-label">Dirección <span class="optional">(opcional)</span></label>
+                                <input id="cliDireccion" type="text" class="form-control" aria-describedby="error-cliDireccion">
+                                <div id="error-cliDireccion" class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="submit" class="cta border-0">Guardar cliente</button>
+                            <button type="reset" class="cta cta-secondary">Cancelar / limpiar</button>
+                        </div>
+                    </form>
+
+                    <div class="table-wrap mt-4">
+                        <table class="mv-table">
+                            <caption>Clientes registrados</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Teléfono</th>
+                                    <th scope="col">Dirección</th>
+                                    <th scope="col">Compras</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaClientes"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <!-- ==================== 3. USUARIOS ==================== -->
+            <section class="tab-pane fade" id="panel-usuarios" role="tabpanel" aria-labelledby="tab-usuarios">
+                <div class="register-panel">
+
+                    <h2 id="tituloFormUsuario" class="section-label">AGREGAR USUARIO</h2>
+
+                    <p class="register-intro">
+                        Fichas de usuarios y sus roles. Para iniciar sesión se usan las dos cuentas de prueba.
+                    </p>
+
+                    <form id="formUsuario" novalidate>
+                        <input id="usuId" type="hidden">
+
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label for="usuNombre" class="form-label">Nombre completo *</label>
+                                <input id="usuNombre" type="text" class="form-control" aria-describedby="error-usuNombre">
+                                <div id="error-usuNombre" class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="usuUsuario" class="form-label">Nombre de usuario *</label>
+                                <input id="usuUsuario" type="text" class="form-control" aria-describedby="error-usuUsuario">
+                                <div id="error-usuUsuario" class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="usuCorreo" class="form-label">Correo *</label>
+                                <input id="usuCorreo" type="email" class="form-control" aria-describedby="error-usuCorreo">
+                                <div id="error-usuCorreo" class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="usuRol" class="form-label">Rol *</label>
+                                <select id="usuRol" class="form-select" aria-describedby="error-usuRol">
+                                    <option value="">Selecciona un rol</option>
+                                    <option value="cliente">Cliente</option>
+                                    <option value="administrador">Administrador</option>
+                                </select>
+                                <div id="error-usuRol" class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="submit" class="cta border-0">Guardar usuario</button>
+                            <button type="reset" class="cta cta-secondary">Cancelar / limpiar</button>
+                        </div>
+                    </form>
+
+                    <div class="table-wrap mt-4">
+                        <table class="mv-table">
+                            <caption>Usuarios del sistema</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Usuario</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Rol</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaUsuarios"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <!-- ==================== 4. PEDIDOS ==================== -->
+            <section class="tab-pane fade" id="panel-pedidos" role="tabpanel" aria-labelledby="tab-pedidos">
+                <div class="register-panel">
+
+                    <h2 class="section-label">PEDIDOS DE TODOS LOS CLIENTES</h2>
+
+                    <p class="register-intro">
+                        Compras de todos los clientes, asociadas a su correo.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table class="mv-table">
+                            <caption>Pedidos (simulados)</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">N°</th>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Cliente</th>
+                                    <th scope="col">Productos</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaPedidos"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+
+
+        <!-- Reiniciar la demostración -->
+        <div class="form-buttons">
+            <button id="btnRestablecer" type="button" class="cta cta-secondary">Restablecer datos de demostración</button>
+        </div>
+
+        <!-- S3: aviso obligatorio. Todo lo que ocurre en esta página es una simulación. -->
+        <p class="notice-demo">
+            Sitio académico: cuentas, stock, carrito, pedidos y pagos son ficticios.
+            Los datos se guardan solo en este navegador (localStorage / sessionStorage).
+            No existe servidor ni pago real.
+        </p>
+
+    </main>
+
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="site-footer">
+
+        <div class="shell">
+
+            MESAVERSO © <span id="anio-actual">2026</span>
+
+            <span>
+                · Catálogo demostrativo para FullStack II
+                · Precios ficticios
+            </span>
+
+        </div>
+
+    </footer>
+
+    <!-- S2: Bootstrap JS (menú colapsable y pestañas). -->
+    <script src="vendor/bootstrap.bundle.min.js"></script>
+
+    <!-- S3: datos ficticios y sesión. Deben ir ANTES que los demás archivos propios. -->
+    <script src="js/datos-s3.js"></script>
+    <script src="js/sesion-s3.js"></script>
+
+    <!-- S2: JavaScript propio común a todas las páginas (menú activo, año del pie). -->
+    <script src="js/main.js"></script>
+
+    <!-- S3: reglas de validación, presentación de errores y mantenedores. -->
+    <script src="js/validaciones-s3.js"></script>
+    <script src="js/formulario-s3.js"></script>
+    <script src="js/admin-s3.js"></script>
+
+</body>
+</html>

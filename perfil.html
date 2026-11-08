@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+        name="description"
+        content="Modifica los datos de tu perfil en MesaVerso."
+    >
+
+    <title>Mi perfil | MesaVerso</title>
+
+    <!-- S3: ícono de la pestaña (evita el error 404 de favicon.ico en la consola). -->
+    <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+    <!-- S2: Bootstrap 5.3.6 guardado en vendor/ (funciona sin conexión a internet). -->
+    <link rel="stylesheet" href="vendor/bootstrap.min.css">
+
+    <!-- S1: estilos propios. Se cargan DESPUÉS de Bootstrap para conservar el diseño de MesaVerso. -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- S3: estilos de las pantallas nuevas (login, carrito, administración...). -->
+    <link rel="stylesheet" href="css/s3.css">
+</head>
+
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="site-header">
+
+        <div class="shell header-inner">
+
+            <a
+                class="brand"
+                href="index.html"
+                aria-label="MesaVerso, ir al inicio"
+            >
+                <span class="logo-mark" aria-hidden="true">⚄</span>
+
+                <span>
+                    MESAVERSO
+                    <small>Tu universo de juegos de mesa</small>
+                </span>
+            </a>
+
+            <span class="header-aside d-none d-md-inline">
+                UNA MESA. MIL AVENTURAS.
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- ==================== NAVEGACIÓN ==================== -->
+    <!-- S2: navbar de Bootstrap. En pantallas pequeñas el menú se oculta tras el botón ☰.
+         S3: se cambia a navbar-expand-lg porque el menú tiene más opciones.
+         Cada opción de la derecha tiene data-rol: js/sesion-s3.js la muestra
+         u oculta según quién inició sesión (invitado, cliente o administrador). -->
+    <nav class="navbar navbar-expand-lg top-nav" aria-label="Navegación principal" data-bs-theme="dark">
+
+        <div class="shell nav-inner">
+
+            <span class="navbar-brand d-lg-none">MENÚ</span>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                    aria-controls="menuPrincipal" aria-expanded="false"
+                    aria-label="Abrir o cerrar el menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">TIENDA</a></li>
+                    <li class="nav-item"><a class="nav-link" href="categorias.html">CATEGORÍAS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ofertas.html">OFERTAS</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- Invitado: aún no inicia sesión -->
+                    <li class="nav-item" data-rol="invitado"><a class="nav-link" href="login.html">INGRESAR</a></li>
+                    <li class="nav-item" data-rol="invitado"><a class="nav-link nav-register" href="registro.html">REGISTRO</a></li>
+
+                    <!-- Cliente: compra y revisa sus pedidos -->
+                    <li class="nav-item" data-rol="cliente" hidden>
+                        <a class="nav-link" href="carrito.html">CARRITO<span id="contadorCarrito" class="nav-cart-count">0</span></a>
+                    </li>
+                    <li class="nav-item" data-rol="cliente" hidden><a class="nav-link" href="historial.html">MIS COMPRAS</a></li>
+
+                    <!-- Administrador: gestiona productos, inventario y usuarios -->
+                    <li class="nav-item" data-rol="administrador" hidden><a class="nav-link nav-register" href="admin.html">ADMINISTRAR</a></li>
+
+                    <!-- Cualquier sesión iniciada -->
+                    <li class="nav-item" data-rol="sesion" hidden><a class="nav-link" href="perfil.html">PERFIL</a></li>
+                    <li class="nav-item nav-session" data-rol="sesion" hidden>
+                        <span id="sesionActual" class="nav-session-name"></span>
+                        <button id="cerrarSesion" class="btn-logout" type="button">SALIR</button>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <main id="contenido" class="shell">
+
+        <!-- ==================== RUTA DE NAVEGACIÓN ==================== -->
+        <p class="breadcrumb">
+            <a href="index.html">Tienda</a>
+            <span aria-hidden="true">›</span>
+            Mi perfil
+        </p>
+
+
+        <!-- ==================== ENCABEZADO ==================== -->
+        <div class="category-header">
+
+            <div>
+                <span class="eyebrow">CLUB MESAVERSO</span>
+                <h1>Mi perfil</h1>
+                <p>
+                    Actualiza tus datos personales y tu dirección de despacho.
+                </p>
+            </div>
+
+            <span class="big-symbol" aria-hidden="true">♚</span>
+
+        </div>
+
+
+        <section class="section row g-4" aria-labelledby="titulo-perfil">
+
+            <div class="col-12 col-lg-8">
+
+                <!-- ==================== DATOS PERSONALES ==================== -->
+                <div class="register-panel">
+
+                    <h2 id="titulo-perfil" class="section-label">DATOS PERSONALES</h2>
+
+                    <p class="register-intro">
+                        Correo de la cuenta: <strong id="correoPerfil"></strong>
+                        (no se puede modificar). Los campos con * son obligatorios.
+                    </p>
+
+                    <form id="formPerfil" novalidate>
+
+                        <div class="row g-3">
+
+                            <div class="col-12">
+                                <label for="perfilNombre" class="form-label">Nombre completo *</label>
+                                <input id="perfilNombre" type="text" class="form-control"
+                                       autocomplete="name" aria-describedby="error-perfilNombre">
+                                <div id="error-perfilNombre" class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="perfilUsuario" class="form-label">Nombre de usuario *</label>
+                                <input id="perfilUsuario" type="text" class="form-control"
+                                       autocomplete="username" aria-describedby="error-perfilUsuario">
+                                <div id="error-perfilUsuario" class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="perfilTelefono" class="form-label">
+                                    Teléfono celular <span class="optional">(opcional)</span>
+                                </label>
+                                <input id="perfilTelefono" type="tel" class="form-control"
+                                       placeholder="+56912345678" autocomplete="tel"
+                                       aria-describedby="error-perfilTelefono">
+                                <div id="error-perfilTelefono" class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="perfilDireccion" class="form-label">
+                                    Dirección de despacho <span class="optional">(opcional)</span>
+                                </label>
+                                <input id="perfilDireccion" type="text" class="form-control"
+                                       placeholder="Calle, número, comuna" autocomplete="street-address"
+                                       aria-describedby="error-perfilDireccion">
+                                <div id="error-perfilDireccion" class="invalid-feedback"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="submit" class="cta border-0">Guardar cambios</button>
+                            <button id="btnDeshacerPerfil" type="button" class="cta cta-secondary">Deshacer cambios</button>
+                        </div>
+
+                        <div id="mensajePerfil" class="form-status" role="status" aria-live="polite"></div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- ===== Resumen de la cuenta ===== -->
+            <aside class="col-12 col-lg-4" aria-label="Resumen de la cuenta">
+                <div class="benefits-panel">
+                    <span class="eyebrow">MI CUENTA</span>
+                    <ul class="benefits-list">
+                        <li><strong>Rol</strong><span id="perfilRol"></span></li>
+                        <li><strong>Último cambio</strong><span id="perfilActualizado">Sin cambios todavía</span></li>
+                    </ul>
+                    <p class="benefits-note">
+                        Los cambios se guardan solo en este navegador.
+                    </p>
+                </div>
+            </aside>
+
+        </section>
+
+        <!-- S3: aviso obligatorio. Todo lo que ocurre en esta página es una simulación. -->
+        <p class="notice-demo">
+            Sitio académico: cuentas, stock, carrito, pedidos y pagos son ficticios.
+            Los datos se guardan solo en este navegador (localStorage / sessionStorage).
+            No existe servidor ni pago real.
+        </p>
+
+    </main>
+
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="site-footer">
+
+        <div class="shell">
+
+            MESAVERSO © <span id="anio-actual">2026</span>
+
+            <span>
+                · Catálogo demostrativo para FullStack II
+                · Precios ficticios
+            </span>
+
+        </div>
+
+    </footer>
+
+    <!-- S2: Bootstrap JS (menú colapsable y pestañas). -->
+    <script src="vendor/bootstrap.bundle.min.js"></script>
+
+    <!-- S3: datos ficticios y sesión. Deben ir ANTES que los demás archivos propios. -->
+    <script src="js/datos-s3.js"></script>
+    <script src="js/sesion-s3.js"></script>
+
+    <!-- S2: JavaScript propio común a todas las páginas (menú activo, año del pie). -->
+    <script src="js/main.js"></script>
+
+    <!-- S3: reglas de validación, presentación de errores y edición del perfil. -->
+    <script src="js/validaciones-s3.js"></script>
+    <script src="js/formulario-s3.js"></script>
+    <script src="js/perfil-s3.js"></script>
+
+</body>
+</html>

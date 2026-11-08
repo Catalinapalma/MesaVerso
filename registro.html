@@ -12,11 +12,17 @@
 
     <title>Registro | MesaVerso</title>
 
+    <!-- S3: ícono de la pestaña (evita el error 404 de favicon.ico en la consola). -->
+    <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
     <!-- S2: Bootstrap 5.3.6 guardado en vendor/ (funciona sin conexión a internet). -->
     <link rel="stylesheet" href="vendor/bootstrap.min.css">
 
     <!-- S1: estilos propios. Se cargan DESPUÉS de Bootstrap para conservar el diseño de MesaVerso. -->
     <link rel="stylesheet" href="css/styles.css">
+
+    <!-- S3: estilos agregados en la Semana 3 (menú por rol, stock, carrito...). -->
+    <link rel="stylesheet" href="css/s3.css">
 </head>
 
 <body>
@@ -49,12 +55,15 @@
 
 
     <!-- ==================== NAVEGACIÓN ==================== -->
-    <!-- S2: navbar de Bootstrap. En pantallas pequeñas el menú se oculta tras el botón ☰. -->
-    <nav class="navbar navbar-expand-md top-nav" aria-label="Navegación principal" data-bs-theme="dark">
+    <!-- S2: navbar de Bootstrap. En pantallas pequeñas el menú se oculta tras el botón ☰.
+         S3: se cambia a navbar-expand-lg porque el menú tiene más opciones.
+         Cada opción de la derecha tiene data-rol: js/sesion-s3.js la muestra
+         u oculta según quién inició sesión (invitado, cliente o administrador). -->
+    <nav class="navbar navbar-expand-lg top-nav" aria-label="Navegación principal" data-bs-theme="dark">
 
         <div class="shell nav-inner">
 
-            <span class="navbar-brand d-md-none">MENÚ</span>
+            <span class="navbar-brand d-lg-none">MENÚ</span>
 
             <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
@@ -70,7 +79,25 @@
                     <li class="nav-item"><a class="nav-link" href="ofertas.html">OFERTAS</a></li>
                 </ul>
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link nav-register" href="registro.html">REGISTRO</a></li>
+                    <!-- Invitado: aún no inicia sesión -->
+                    <li class="nav-item" data-rol="invitado"><a class="nav-link" href="login.html">INGRESAR</a></li>
+                    <li class="nav-item" data-rol="invitado"><a class="nav-link nav-register" href="registro.html">REGISTRO</a></li>
+
+                    <!-- Cliente: compra y revisa sus pedidos -->
+                    <li class="nav-item" data-rol="cliente" hidden>
+                        <a class="nav-link" href="carrito.html">CARRITO<span id="contadorCarrito" class="nav-cart-count">0</span></a>
+                    </li>
+                    <li class="nav-item" data-rol="cliente" hidden><a class="nav-link" href="historial.html">MIS COMPRAS</a></li>
+
+                    <!-- Administrador: gestiona productos, inventario y usuarios -->
+                    <li class="nav-item" data-rol="administrador" hidden><a class="nav-link nav-register" href="admin.html">ADMINISTRAR</a></li>
+
+                    <!-- Cualquier sesión iniciada -->
+                    <li class="nav-item" data-rol="sesion" hidden><a class="nav-link" href="perfil.html">PERFIL</a></li>
+                    <li class="nav-item nav-session" data-rol="sesion" hidden>
+                        <span id="sesionActual" class="nav-session-name"></span>
+                        <button id="cerrarSesion" class="btn-logout" type="button">SALIR</button>
+                    </li>
                 </ul>
             </div>
 
@@ -121,6 +148,7 @@
 
                     <p class="register-intro">
                         Todos los campos son obligatorios, excepto la dirección de despacho.
+                        ¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a>.
                     </p>
 
                     <!-- novalidate: desactiva los avisos automáticos del navegador para que
@@ -171,10 +199,13 @@
 
                                 <!-- S2: lista de requisitos. JavaScript marca cada regla
                                      como cumplida (clase "ok") mientras se escribe. -->
+                                <!-- S3: 5 reglas de seguridad (antes 3). -->
                                 <ul id="reglas-clave" class="pass-rules">
-                                    <li data-regla="largo">Entre 6 y 18 caracteres</li>
+                                    <li data-regla="minimo">Mínimo 6 caracteres</li>
+                                    <li data-regla="maximo">Máximo 18 caracteres</li>
                                     <li data-regla="mayuscula">Al menos una letra mayúscula</li>
                                     <li data-regla="numero">Al menos un número</li>
+                                    <li data-regla="especial">Al menos un carácter especial (! # $ % …)</li>
                                 </ul>
                             </div>
 
@@ -202,7 +233,9 @@
                                     Dirección de despacho <span class="optional">(opcional)</span>
                                 </label>
                                 <input id="direccion" name="direccion" type="text" class="form-control"
-                                       placeholder="Calle, número, comuna" autocomplete="street-address">
+                                       placeholder="Calle, número, comuna" autocomplete="street-address"
+                                       aria-describedby="error-direccion">
+                                <div id="error-direccion" class="invalid-feedback"></div>
                             </div>
 
                         </div>
@@ -244,8 +277,8 @@
                     </ul>
 
                     <p class="benefits-note">
-                        Sitio académico: los datos solo se validan en tu navegador.
-                        No se guardan ni se envían a ningún servidor.
+                        Sitio académico: tu ficha (sin la contraseña) se guarda solo en este
+                        navegador. No se envía a ningún servidor.
                     </p>
 
                 </div>
@@ -275,10 +308,17 @@
     <!-- S2: Bootstrap JS. Solo hace funcionar el menú colapsable (botón ☰). -->
     <script src="vendor/bootstrap.bundle.min.js"></script>
 
+    <!-- S3: datos ficticios y menú según el rol. Deben ir ANTES que los demás archivos propios. -->
+    <script src="js/datos-s3.js"></script>
+    <script src="js/sesion-s3.js"></script>
+
     <!-- S2: JavaScript propio común a todas las páginas (menú activo, año del pie). -->
     <script src="js/main.js"></script>
 
-    <!-- S2: validaciones del formulario de registro. -->
+    <!-- S3: reglas de validación compartidas (las usa registro.js). -->
+    <script src="js/validaciones-s3.js"></script>
+
+    <!-- S2: validaciones del formulario de registro (S3: usa validaciones-s3.js). -->
     <script src="js/registro.js"></script>
 
 </body>
