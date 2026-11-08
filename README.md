@@ -60,5 +60,52 @@ Para probar las funcionalidades se encuentran disponibles las siguientes cuentas
 | Rol | Correo | Contraseña |
 |---|---|---|
 | Cliente | `cliente@mesaverso.cl` | `Cliente123!` |
-| Administr
+| Administrador | `admin@mesaverso.cl` | `Admin123!` |
+
+**Cliente:** puede explorar productos, utilizar el carrito, simular compras, consultar su historial y modificar su perfil.
+
+**Administrador:** puede acceder al panel de administración para gestionar productos, inventario, clientes, usuarios y pedidos.
+
+
+## Estructura del proyecto
+
+```text
+MesaVerso/
+├── index.html
+├── categorias.html
+├── estrategia.html
+├── familiares.html
+├── cartas.html
+├── cooperativos.html
+├── ofertas.html
+├── registro.html
+├── login.html
+├── recuperar.html
+├── perfil.html
+├── carrito.html
+├── confirmacion.html
+├── historial.html
+├── admin.html
+├── css/
+│   ├── styles.css
+│   └── s3.css
+├── js/
+│   └── Archivos JavaScript del proyecto
+├── img/
+│   └── Imágenes de productos y recursos visuales
+└── vendor/
+    └── Bootstrap
+```
+
+## Almacenamiento y alcance
+
+El proyecto utiliza **localStorage** para conservar datos ficticios de productos, usuarios y pedidos, y **sessionStorage** para manejar información de sesión.
+
+MesaVerso corresponde a un prototipo académico de FrontEnd. No cuenta con backend, base de datos externa, autenticación real ni integración con medios de pago.
+
+Las compras, las cuentas y las operaciones administrativas son simulaciones desarrolladas con fines educativos.
+
+---
+
+**Proyecto académico — FullStack II | Duoc UC | 2026**
 
