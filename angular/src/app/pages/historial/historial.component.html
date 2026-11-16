@@ -1,0 +1,56 @@
+<div class="shell">
+  <p class="breadcrumb">
+    <a routerLink="/">Tienda</a>
+    <span aria-hidden="true">›</span>
+    Mis compras
+  </p>
+
+  <div class="category-header">
+    <div>
+      <span class="eyebrow">CLUB MESAVERSO</span>
+      <h1>Mis compras</h1>
+      <p>Historial de pedidos asociados a tu cuenta.</p>
+    </div>
+    <span class="big-symbol" aria-hidden="true">☰</span>
+  </div>
+
+  <p class="notice-demo" *ngIf="!sesion.esCliente">Inicia sesión como cliente para ver tus compras.</p>
+  <ng-container *ngIf="sesion.esCliente">
+    <section class="section" aria-label="Resumen de compras">
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="stat-card"><span>Pedidos</span><strong>{{compras.length}}</strong></div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="stat-card"><span>Juegos comprados</span><strong>{{totalJuegos}}</strong></div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="stat-card"><span>Total gastado</span><strong>{{catalogo.moneda(totalGastado)}}</strong></div>
+        </div>
+      </div>
+
+      <div class="register-panel">
+        <h2 class="section-label">DETALLE DE PEDIDOS</h2>
+        <p class="register-intro" *ngIf="compras.length === 0">Aún no tienes compras registradas.</p>
+        <div class="table-wrap" *ngIf="compras.length > 0">
+          <table class="mv-table">
+            <caption>Pedidos de la cuenta, del más reciente al más antiguo</caption>
+            <thead>
+              <tr><th scope="col">N.º</th><th scope="col">Fecha</th><th scope="col">Productos</th><th scope="col">Pago</th><th scope="col">Estado</th><th scope="col">Total</th></tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let pedido of compras">
+                <td>{{pedido.id}}</td>
+                <td>{{pedido.fecha}}</td>
+                <td>{{pedido.items.length}} producto(s)</td>
+                <td>{{pedido.pago}}</td>
+                <td>{{pedido.estado}}</td>
+                <td>{{catalogo.moneda(pedido.total)}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </ng-container>
+</div>

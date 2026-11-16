@@ -1,0 +1,49 @@
+<section class="section shell">
+  <ng-container *ngIf="juego as actual; else noEncontrado">
+    <p class="breadcrumb">
+      <a routerLink="/">Tienda</a>
+      <span aria-hidden="true">›</span>
+      <a [routerLink]="['/categoria', slugCategoria(actual.categoria)]">{{actual.categoria}}</a>
+      <span aria-hidden="true">›</span>
+      {{actual.nombre}}
+    </p>
+    <div class="category-header">
+      <div>
+        <span class="eyebrow">{{actual.categoria}}</span>
+        <h1>{{actual.nombre}}</h1>
+        <p>{{actual.descripcion}}</p>
+      </div>
+      <span class="big-symbol" aria-hidden="true">⚄</span>
+    </div>
+    <div class="row g-4 align-items-start">
+      <div class="col-12 col-md-5">
+        <div class="detail-cover">
+          <img [src]="actual.imagen" [alt]="'Ilustración de ' + actual.nombre" width="1536" height="1024">
+        </div>
+      </div>
+      <div class="col-12 col-md-7">
+        <div class="register-panel">
+        <h2 class="section-label">DETALLES DEL JUEGO</h2>
+        <p>{{actual.descripcion}}</p>
+        <p class="price-line" *ngIf="actual.precioOferta !== null">
+          <span class="discount">-{{catalogo.descuentoPorcentaje(actual)}}%</span>
+          <span class="old-price">{{catalogo.moneda(actual.precio)}}</span>
+          {{catalogo.moneda(catalogo.precioFinal(actual))}}
+        </p>
+        <p class="price-line" *ngIf="actual.precioOferta === null">{{catalogo.moneda(actual.precio)}}</p>
+        <p class="stock-line">Stock: {{actual.stock}}</p>
+        <div class="form-buttons">
+          <button class="cta border-0" type="button" (click)="agregar()" [disabled]="actual.stock <= 0">Agregar al carrito</button>
+          <a class="cta cta-secondary" [routerLink]="['/categoria', slugCategoria(actual.categoria)]">← Volver a {{actual.categoria}}</a>
+        </div>
+        <p class="form-status exito" *ngIf="mensaje" role="status">{{mensaje}}</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noEncontrado>
+    <h1>El juego no existe</h1>
+    <p>Revisa el número de la dirección.</p>
+    <a routerLink="/">Volver al inicio</a>
+  </ng-template>
+</section>

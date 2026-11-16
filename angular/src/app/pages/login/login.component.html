@@ -1,0 +1,55 @@
+<div class="shell">
+  <p class="breadcrumb">
+    <a routerLink="/">Tienda</a>
+    <span aria-hidden="true">›</span>
+    Iniciar sesión
+  </p>
+
+  <div class="category-header">
+    <div>
+      <span class="eyebrow">CLUB MESAVERSO</span>
+      <h1>Iniciar sesión</h1>
+      <p>Ingresa como cliente para comprar o como administrador para gestionar el catálogo de MesaVerso.</p>
+    </div>
+    <span class="big-symbol" aria-hidden="true">♜</span>
+  </div>
+
+  <section class="section row g-4" aria-labelledby="titulo-login">
+    <div class="col-12 col-lg-7">
+      <div class="register-panel">
+        <h2 id="titulo-login" class="section-label">ACCESO</h2>
+        <p class="register-intro">Ambos campos son obligatorios.</p>
+        <form (ngSubmit)="entrar()">
+          <label class="form-label" for="correo">Correo electrónico *</label>
+          <input id="correo" name="correo" class="form-control mb-3" type="email"
+            placeholder="nombre@correo.cl" autocomplete="username" [(ngModel)]="correo">
+          <label class="form-label" for="clave">Contraseña *</label>
+          <input id="clave" name="clave" class="form-control mb-3" type="password"
+            placeholder="Tu contraseña" autocomplete="current-password" [(ngModel)]="clave">
+          <div class="form-buttons">
+            <button class="cta border-0" type="submit">Iniciar sesión</button>
+          </div>
+        </form>
+        <p class="form-status error" *ngIf="mensaje" role="alert">{{mensaje}}</p>
+        <div class="form-links">
+          <a routerLink="/recuperar">¿Olvidaste tu contraseña?</a>
+          <a routerLink="/registro">Crear una cuenta</a>
+        </div>
+      </div>
+    </div>
+
+    <aside class="col-12 col-lg-5" aria-label="Cuentas de prueba">
+      <div class="benefits-panel">
+        <span class="eyebrow">CUENTAS DE DEMOSTRACIÓN</span>
+        <p class="register-intro mt-2">Usa una cuenta ficticia para probar la tienda:</p>
+        <div class="demo-account" *ngFor="let cuenta of cuentas">
+          <h3>{{cuenta.rol}}</h3>
+          <p>Correo: <code>{{cuenta.correo}}</code></p>
+          <p>Contraseña: <code>{{cuenta.clave}}</code></p>
+          <button class="cta" type="button" (click)="usar(cuenta.correo, cuenta.clave)">Usar esta cuenta</button>
+        </div>
+        <p class="benefits-note">Las cuentas, sesiones y compras son solo una simulación local.</p>
+      </div>
+    </aside>
+  </section>
+</div>
