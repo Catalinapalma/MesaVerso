@@ -1,0 +1,62 @@
+<div class="shell">
+  <p class="breadcrumb">
+    <a routerLink="/">Tienda</a>
+    <span aria-hidden="true">›</span>
+    Mi perfil
+  </p>
+
+  <div class="category-header">
+    <div>
+      <span class="eyebrow">CLUB MESAVERSO</span>
+      <h1>Mi perfil</h1>
+      <p>Actualiza tus datos personales y tu dirección de despacho.</p>
+    </div>
+    <span class="big-symbol" aria-hidden="true">♚</span>
+  </div>
+
+  <section class="section row g-4" aria-labelledby="titulo-perfil">
+    <div class="col-12 col-lg-8" *ngIf="sesion.activa; else sinSesion">
+      <div class="register-panel">
+        <h2 id="titulo-perfil" class="section-label">DATOS PERSONALES</h2>
+        <p class="register-intro">Cuenta: <strong>{{sesion.correo}}</strong> · Rol: {{sesion.rol}}.</p>
+        <form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+          <label class="form-label" for="nombrePerfil">Nombre completo</label>
+          <input id="nombrePerfil" name="nombrePerfil" class="form-control mb-3" type="text"
+            autocomplete="name" formControlName="nombre">
+          <small class="field-error" *ngIf="mensajeDe('nombre', 'El nombre') as m">{{m}}</small>
+          <label class="form-label" for="telPerfil">Teléfono celular</label>
+          <input id="telPerfil" name="telPerfil" class="form-control mb-3" type="tel"
+            autocomplete="tel" formControlName="telefono">
+          <label class="form-label" for="dirPerfil">Dirección de despacho</label>
+          <input id="dirPerfil" name="dirPerfil" class="form-control" type="text"
+            autocomplete="street-address" formControlName="direccion">
+          <div class="form-buttons">
+            <button class="cta border-0" type="submit">Guardar cambios</button>
+            <button class="cta cta-secondary" type="button" (click)="limpiar()">Limpiar</button>
+          </div>
+        </form>
+        <p class="form-status exito" *ngIf="mensaje" role="status">{{mensaje}}</p>
+      </div>
+    </div>
+
+    <aside class="col-12 col-lg-4" *ngIf="sesion.activa" aria-label="Resumen de la cuenta">
+      <div class="benefits-panel">
+        <span class="eyebrow">MI CUENTA</span>
+        <ul class="benefits-list">
+          <li><strong>Correo</strong>{{sesion.correo}}</li>
+          <li><strong>Rol</strong>{{sesion.rol}}</li>
+        </ul>
+        <p class="benefits-note">Los cambios se guardan solo en este navegador.</p>
+      </div>
+    </aside>
+
+    <ng-template #sinSesion>
+      <div class="col-12">
+        <div class="register-panel">
+          <p>Debes iniciar sesión para ver tu perfil.</p>
+          <a class="cta" routerLink="/login">Ir a ingresar</a>
+        </div>
+      </div>
+    </ng-template>
+  </section>
+</div>

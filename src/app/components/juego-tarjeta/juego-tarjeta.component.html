@@ -1,0 +1,24 @@
+<!-- Misma estructura de tarjeta que la versión S3 (article.game-card con portada y precio tachado) -->
+<article class="game-card h-100">
+  <div class="cover">
+    <img [src]="juego.imagen" [alt]="'Ilustración de ' + juego.nombre" loading="lazy">
+    <span class="cover-sale" *ngIf="juego.precioOferta !== null">-{{catalogo.descuentoPorcentaje(juego)}}%</span>
+  </div>
+  <div class="game-info d-flex flex-column">
+    <h3>{{juego.nombre}}</h3>
+    <p>{{juego.descripcion}}</p>
+    <div class="price-line mt-auto">
+      <span class="discount" *ngIf="juego.precioOferta !== null">-{{catalogo.descuentoPorcentaje(juego)}}%</span>
+      <div class="prices">
+        <span class="old-price" *ngIf="juego.precioOferta !== null">{{catalogo.moneda(juego.precio)}}</span>
+        <strong>{{catalogo.moneda(catalogo.precioFinal(juego))}}</strong>
+      </div>
+    </div>
+    <p class="stock-line mt-2 mb-2">Stock: {{juego.stock}}</p>
+    <div class="d-flex gap-2 flex-wrap">
+      <a class="btn btn-outline-primary btn-sm" [routerLink]="['/juego', juego.id]">Ver detalle</a>
+      <button class="btn btn-cart btn-sm" type="button" [disabled]="juego.stock <= 0"
+        (click)="agregarAlCarrito.emit(juego.id)">Agregar</button>
+    </div>
+  </div>
+</article>

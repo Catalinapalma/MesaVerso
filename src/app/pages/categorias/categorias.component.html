@@ -1,0 +1,40 @@
+<div class="shell">
+  <p class="breadcrumb">
+    <a routerLink="/">Tienda</a>
+    <span aria-hidden="true">›</span>
+    Categorías
+  </p>
+
+  <div class="category-header">
+    <div>
+      <span class="eyebrow">EXPLORA MESAVERSO</span>
+      <h1>Explora por categoría</h1>
+      <p>Cuatro formas de jugar. Elige tu colección y descubre los juegos disponibles.</p>
+    </div>
+    <span class="big-symbol" aria-hidden="true">⚄</span>
+  </div>
+
+  <section class="section">
+    <div class="section-heading">
+      <h2>NUESTRAS COLECCIONES</h2>
+      <p>Selecciona una categoría para ver sus juegos</p>
+    </div>
+    <div class="row g-3 category-grid">
+      <div class="col-12 col-sm-6 col-lg-3" *ngFor="let categoria of catalogo.categorias; let i = index">
+        <a class="category-card h-100" [routerLink]="['/categoria', categoria.slug]">
+          <div class="category-image">
+            <img [src]="categoria.imagen" [alt]="'Ilustración de juegos de ' + categoria.nombre" width="1536" height="1024" loading="lazy">
+          </div>
+          <div class="category-caption">
+            <div>
+              <span class="category-index">0{{i + 1}} / 0{{catalogo.categorias.length}}</span>
+              <h3>{{categoria.nombre}}</h3>
+            </div>
+            <span class="cat-arrow" aria-hidden="true">↗</span>
+          </div>
+          <span class="category-link">Ver colección →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

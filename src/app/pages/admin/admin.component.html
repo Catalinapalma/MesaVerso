@@ -1,0 +1,156 @@
+<div class="shell">
+  <p class="breadcrumb">
+    <a routerLink="/">Tienda</a>
+    <span aria-hidden="true">›</span>
+    Administración
+  </p>
+
+  <ng-container *ngIf="sesion.esAdmin; else sinAcceso">
+    <div class="category-header">
+      <div>
+        <span class="eyebrow">GESTIÓN MESAVERSO</span>
+        <h1>Panel de administración</h1>
+        <p>Administra el catálogo, las cuentas y los pedidos de demostración.</p>
+      </div>
+      <span class="big-symbol" aria-hidden="true">⚙</span>
+    </div>
+    <p class="notice-demo" *ngIf="mensaje" role="status">{{mensaje}}</p>
+
+    <ul class="nav nav-tabs admin-tabs mb-4" role="tablist" aria-label="Secciones de administración">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" [class.active]="vista === 'productos'" type="button" role="tab"
+          [attr.aria-selected]="vista === 'productos'" (click)="cambiarVista('productos')">Productos</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" [class.active]="vista === 'clientes'" type="button" role="tab"
+          [attr.aria-selected]="vista === 'clientes'" (click)="cambiarVista('clientes')">Clientes</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" [class.active]="vista === 'usuarios'" type="button" role="tab"
+          [attr.aria-selected]="vista === 'usuarios'" (click)="cambiarVista('usuarios')">Usuarios</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" [class.active]="vista === 'pedidos'" type="button" role="tab"
+          [attr.aria-selected]="vista === 'pedidos'" (click)="cambiarVista('pedidos')">Pedidos</button>
+      </li>
+    </ul>
+
+    <!-- PRODUCTOS: tabla con *ngFor, control de stock y formulario de alta -->
+    <div *ngIf="vista === 'productos'">
+      <div class="register-panel">
+        <h2 class="section-label">PRODUCTOS E INVENTARIO</h2>
+        <div class="table-wrap">
+          <table class="mv-table">
+            <thead><tr><th>ID</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Stock</th><th></th></tr></thead>
+            <tbody>
+              <tr *ngFor="let juego of productos">
+                <td>{{juego.id}}</td>
+                <td>{{juego.nombre}}</td>
+                <td>{{juego.categoria}}</td>
+                <td>{{catalogo.moneda(catalogo.precioFinal(juego))}}</td>
+                <td>
+                  <button class="btn-mini" type="button" (click)="stock(juego, -1)" [disabled]="juego.stock <= 0">−</button>
+                  <strong>{{juego.stock}}</strong>
+                  <button class="btn-mini" type="button" (click)="stock(juego, 1)">+</button>
+                </td>
+                <td><button class="btn-mini peligro" type="button" (click)="eliminarJuego(juego.id)">Eliminar</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <form [formGroup]="formulario" (ngSubmit)="guardarJuego()" class="register-panel mt-4" novalidate>
+        <h2 class="section-label">AGREGAR JUEGO</h2>
+        <label class="form-label" for="nNombre">Nombre *</label>
+        <input id="nNombre" class="form-control mb-1" formControlName="nombre">
+        <small class="field-error" *ngIf="mensajeDe('nombre', 'El nombre') as m">{{m}}</small>
+
+        <label class="form-label" for="nCat">Categoría *</label>
+        <select id="nCat" class="form-select mb-2" formControlName="categoria">
+          <option *ngFor="let c of catalogo.categorias" [value]="c.nombre">{{c.nombre}}</option>
+        </select>
+
+        <label class="form-label" for="nPrecio">Precio normal *</label>
+        <input id="nPrecio" class="form-control mb-1" type="number" formControlName="precio">
+        <small class="field-error" *ngIf="mensajeDe('precio', 'El precio') as m">{{m}}</small>
+
+        <label class="form-label" for="nOferta">Precio de oferta (vacío = sin oferta)</label>
+        <input id="nOferta" class="form-control mb-1" type="number" formControlName="precioOferta">
+        <small class="field-error" *ngIf="formulario.hasError('ofertaInvalida') && formulario.controls.precioOferta.touched">
+          El precio de oferta debe ser menor que el precio normal.
+        </small>
+
+        <label class="form-label" for="nStock">Stock *</label>
+        <input id="nStock" class="form-control mb-1" type="number" formControlName="stock">
+        <small class="field-error" *ngIf="mensajeDe('stock', 'El stock') as m">{{m}}</small>
+
+        <label class="form-label" for="nDesc">Descripción *</label>
+        <input id="nDesc" class="form-control mb-3" formControlName="descripcion">
+        <small class="field-error" *ngIf="mensajeDe('descripcion', 'La descripción') as m">{{m}}</small>
+
+        <div class="form-buttons">
+          <button class="cta border-0" type="submit">Guardar juego</button>
+          <button class="cta cta-secondary" type="button" (click)="limpiarJuego()">Limpiar</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- CLIENTES -->
+    <div class="register-panel" *ngIf="vista === 'clientes'">
+      <h2 class="section-label">CLIENTES</h2>
+      <div class="table-wrap">
+        <table class="mv-table">
+          <thead><tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Teléfono</th><th></th></tr></thead>
+          <tbody>
+            <tr *ngFor="let c of clientes">
+              <td>{{c.id}}</td><td>{{c.nombre}}</td><td>{{c.correo}}</td><td>{{c.telefono}}</td>
+              <td><button class="btn-mini peligro" type="button" (click)="eliminarCliente(c.id)">Eliminar</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- USUARIOS: el administrador no puede eliminarse a sí mismo -->
+    <div class="register-panel" *ngIf="vista === 'usuarios'">
+      <h2 class="section-label">USUARIOS</h2>
+      <div class="table-wrap">
+        <table class="mv-table">
+          <thead><tr><th>ID</th><th>Nombre</th><th>Usuario</th><th>Rol</th><th></th></tr></thead>
+          <tbody>
+            <tr *ngFor="let u of usuarios">
+              <td>{{u.id}}</td><td>{{u.nombre}}</td><td>{{u.usuario}}</td>
+              <td><span class="tag-rol" [class.administrador]="u.rol === 'administrador'">{{u.rol}}</span></td>
+              <td><button class="btn-mini peligro" type="button" *ngIf="u.rol !== 'administrador'" (click)="eliminarUsuario(u.id)">Eliminar</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PEDIDOS: solo lectura -->
+    <div class="register-panel" *ngIf="vista === 'pedidos'">
+      <h2 class="section-label">PEDIDOS</h2>
+      <div class="table-wrap">
+        <table class="mv-table">
+          <thead><tr><th>N.º</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let p of pedidos">
+              <td>{{p.id}}</td><td>{{p.cliente}}</td><td>{{p.fecha}}</td><td>{{catalogo.moneda(p.total)}}</td><td>{{p.estado}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <button class="cta cta-secondary mt-4" type="button" (click)="restablecer()">Restablecer datos de demostración</button>
+  </ng-container>
+
+  <ng-template #sinAcceso>
+    <div class="register-panel">
+      <p>Esta página es solo para el administrador.</p>
+      <a routerLink="/login">Ir a ingresar</a>
+    </div>
+  </ng-template>
+</div>

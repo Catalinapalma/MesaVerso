@@ -1,0 +1,93 @@
+<div class="shell">
+  <p class="breadcrumb">
+    <a routerLink="/">Tienda</a>
+    <span aria-hidden="true">›</span>
+    Registro
+  </p>
+
+  <div class="category-header">
+    <div>
+      <span class="eyebrow">CLUB MESAVERSO</span>
+      <h1>Crea tu cuenta</h1>
+      <p>Regístrate para llevar el registro de tus datos en nuestra tienda de demostración.</p>
+    </div>
+    <span class="big-symbol" aria-hidden="true">♛</span>
+  </div>
+
+  <section class="section row g-4" aria-labelledby="titulo-registro">
+    <div class="col-12 col-lg-8">
+      <div class="register-panel">
+        <h2 id="titulo-registro" class="section-label">FORMULARIO DE REGISTRO</h2>
+        <p class="register-intro">Los campos con * son obligatorios. La dirección de despacho es opcional.</p>
+
+        <!-- [formGroup] conecta la plantilla con el FormGroup definido en TypeScript -->
+        <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label" for="nombre">Nombre completo *</label>
+              <input id="nombre" class="form-control" type="text" autocomplete="name" formControlName="nombre">
+              <small class="field-error" *ngIf="mensajeDe('nombre', 'El nombre') as m">{{m}}</small>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="correoR">Correo electrónico *</label>
+              <input id="correoR" class="form-control" type="email" autocomplete="email" formControlName="correo">
+              <small class="field-error" *ngIf="mensajeDe('correo', 'El correo') as m">{{m}}</small>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="nacimiento">Fecha de nacimiento *</label>
+              <input id="nacimiento" class="form-control" type="date" autocomplete="bday" formControlName="nacimiento">
+              <small class="field-error" *ngIf="mensajeDe('nacimiento', 'La fecha de nacimiento') as m">{{m}}</small>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="clave">Contraseña *</label>
+              <input id="clave" class="form-control" type="password" autocomplete="new-password" formControlName="clave">
+              <small class="field-error" *ngIf="mensajeDe('clave', 'La contraseña') as m">{{m}}</small>
+              <small class="field-hint">Entre 6 y 18 caracteres, con al menos una mayúscula y un número.</small>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="repeticion">Repite la contraseña *</label>
+              <input id="repeticion" class="form-control" type="password" autocomplete="new-password" formControlName="repeticion">
+              <small class="field-error" *ngIf="mensajeDe('repeticion', 'Repetir la contraseña') as m">{{m}}</small>
+              <small class="field-error" *ngIf="clavesDistintas">Las contraseñas no coinciden.</small>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="telefono">Teléfono</label>
+              <input id="telefono" class="form-control" type="tel" autocomplete="tel" formControlName="telefono">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label" for="direccion">Dirección de despacho (opcional)</label>
+              <input id="direccion" class="form-control" type="text" autocomplete="street-address" formControlName="direccion">
+            </div>
+          </div>
+
+          <div class="form-buttons">
+            <button class="cta border-0" type="submit">Registrarme</button>
+            <button class="cta cta-secondary" type="button" data-testid="btn-limpiar" (click)="limpiar()">Limpiar</button>
+            <a class="cta cta-secondary" routerLink="/login">Ya tengo cuenta</a>
+          </div>
+        </form>
+
+        <p class="form-status error" *ngIf="alerta" role="alert">{{alerta}}</p>
+        <p class="form-status exito" *ngIf="mensaje" role="status">{{mensaje}}</p>
+      </div>
+    </div>
+
+    <aside class="col-12 col-lg-4" aria-label="Información del registro">
+      <div class="benefits-panel">
+        <span class="eyebrow">CLUB MESAVERSO</span>
+        <ul class="benefits-list">
+          <li><strong>Datos validados</strong>Revisamos el correo, la clave y tu edad antes de guardar.</li>
+          <li><strong>Explora el catálogo</strong>Encuentra juegos por categoría y descubre ofertas.</li>
+          <li><strong>Modo demostración</strong>El registro no crea una cuenta de acceso real.</li>
+        </ul>
+        <p class="benefits-note">Para probar la compra, inicia sesión con una de las cuentas de demostración.</p>
+      </div>
+    </aside>
+  </section>
+</div>

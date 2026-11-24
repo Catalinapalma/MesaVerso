@@ -1,0 +1,52 @@
+<div class="shell">
+  <p class="breadcrumb">
+    <a routerLink="/">Tienda</a>
+    <span aria-hidden="true">›</span>
+    <a routerLink="/login">Iniciar sesión</a>
+    <span aria-hidden="true">›</span>
+    Recuperar contraseña
+  </p>
+
+  <div class="category-header">
+    <div>
+      <span class="eyebrow">CLUB MESAVERSO</span>
+      <h1>Recuperar contraseña</h1>
+      <p>Escribe el correo de tu cuenta para recibir instrucciones de recuperación.</p>
+    </div>
+    <span class="big-symbol" aria-hidden="true">⚿</span>
+  </div>
+
+  <section class="section row g-4" aria-labelledby="titulo-recuperar">
+    <div class="col-12 col-lg-8">
+      <div class="register-panel">
+        <h2 id="titulo-recuperar" class="section-label">TU CORREO</h2>
+        <p class="register-intro">Escribe el correo con el que te registraste.</p>
+        <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
+          <label class="form-label" for="correoRec">Correo electrónico *</label>
+          <input id="correoRec" name="correoRec" class="form-control" type="email"
+            placeholder="nombre@correo.cl" autocomplete="email" formControlName="correo">
+          <small class="field-error" *ngIf="mensajeDe('correo', 'El correo') as m">{{m}}</small>
+          <div class="form-buttons">
+            <button class="cta border-0" type="submit">Enviar instrucciones</button>
+            <button class="cta cta-secondary" type="button" (click)="limpiar()">Limpiar</button>
+            <a class="cta cta-secondary" routerLink="/login">← Volver a iniciar sesión</a>
+          </div>
+        </form>
+        <p class="form-status exito" *ngIf="enviado" role="status">
+          Simulación: en una app real llegaría un correo para restablecer la clave.
+        </p>
+      </div>
+    </div>
+
+    <aside class="col-12 col-lg-4" aria-label="Cómo funciona la recuperación">
+      <div class="benefits-panel">
+        <span class="eyebrow">¿CÓMO FUNCIONA?</span>
+        <ul class="benefits-list">
+          <li><strong>1. Escribe tu correo</strong>Debe tener un formato válido y estar registrado.</li>
+          <li><strong>2. Revisa tu bandeja</strong>En un sitio real llegaría un enlace para crear una contraseña nueva.</li>
+        </ul>
+        <p class="benefits-note">Simulación: no se envía ningún correo ni se modifica una contraseña real.</p>
+      </div>
+    </aside>
+  </section>
+</div>
