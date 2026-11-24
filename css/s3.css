@@ -1,0 +1,558 @@
+/* ==========================================================
+   MESAVERSO — SEMANA 3
+   css/s3.css · Estilos nuevos de la Semana 3
+
+   Se carga DESPUÉS de styles.css y no modifica ese archivo.
+   Reutiliza las mismas variables (--panel, --accent, --offer...)
+   para que las páginas nuevas mantengan la identidad de MesaVerso.
+   ========================================================== */
+
+
+/* ==================== 1. MENÚ SEGÚN ROL ==================== */
+
+/* El atributo hidden debe ganar a los display de Bootstrap */
+[data-rol][hidden] {
+    display: none !important;
+}
+
+/* Contador de unidades en "CARRITO" */
+.nav-cart-count {
+    display: inline-block;
+    min-width: 22px;
+    margin-left: 6px;
+    padding: 1px 7px;
+    border-radius: 11px;
+    background: var(--offer);
+    color: #18240a;
+    font-size: 11px;
+    font-weight: 800;
+    text-align: center;
+}
+
+/* Nombre de la sesión + botón SALIR */
+.nav-session {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0 6px 10px;
+}
+
+.nav-session-name {
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.btn-logout {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    padding: 4px 12px;
+    border-radius: 2px;
+}
+
+.btn-logout:hover {
+    background: var(--accent);
+    color: #0e1a26;
+}
+
+
+/* ==================== 2. CONTROLES DE FORMULARIO EXTRA ==================== */
+/* styles.css ya estiliza .form-control; aquí se agregan select y textarea */
+
+.form-select {
+    background-color: #1a2636;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    border-radius: 3px;
+    padding: 10px 12px;
+}
+
+.form-select:focus {
+    background-color: #1d2c3f;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px #66c0f440;
+    color: var(--ink);
+}
+
+.form-select.is-invalid { border-color: #ff6b6b; }
+.form-select.is-valid   { border-color: var(--offer); }
+
+.form-check-input {
+    background-color: #1a2636;
+    border-color: var(--line);
+}
+
+.form-check-input:checked {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* Enlaces secundarios bajo un formulario (¿olvidaste tu contraseña?, etc.) */
+.form-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-top: 18px;
+    font-size: 13px;
+}
+
+
+/* ==================== 3. LOGIN: CUENTAS DE DEMOSTRACIÓN ==================== */
+
+.demo-account {
+    background: var(--panel-2);
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    margin-bottom: 14px;
+}
+
+.demo-account h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.demo-account p {
+    margin: 0 0 4px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.demo-account code {
+    color: var(--ink);
+    background: #18222f;
+    padding: 1px 6px;
+}
+
+.demo-account .cta {
+    margin-top: 8px;
+    padding: 7px 14px;
+    font-size: 12px;
+}
+
+
+/* ==================== 4. CATÁLOGO: STOCK Y BOTÓN DE COMPRA ==================== */
+
+/* Línea creada por catalogo-s3.js debajo del precio */
+.stock-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+}
+
+.stock-badge {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+}
+
+.stock-badge.pocas  { color: #ffd479; }
+.stock-badge.agotado { color: #ff9b9b; }
+
+.btn-cart {
+    background: var(--offer);
+    color: #18240a;
+    border: 0;
+    border-radius: 2px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .4px;
+    cursor: pointer;
+}
+
+.btn-cart:hover:not(:disabled) {
+    filter: brightness(1.1);
+}
+
+.btn-cart:disabled {
+    background: #3a4a5a;
+    color: #9fb2c3;
+    cursor: not-allowed;
+}
+
+.btn-cart.secundario {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+}
+
+/* Aviso que aparece al agregar un juego al carrito */
+.cart-notice {
+    margin: 0 0 18px;
+    padding: 11px 15px;
+    background: #2b3b16;
+    border-left: 4px solid var(--offer);
+    color: #d6f28a;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.cart-notice:empty {
+    display: none;
+}
+
+.cart-notice.error {
+    background: #3e1f27;
+    border-color: #ff6b6b;
+    color: #ffc2c2;
+}
+
+
+/* ==================== 5. CARRITO ==================== */
+
+.cart-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cart-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.cart-item img {
+    width: 92px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.cart-item-info {
+    flex: 1 1 180px;
+}
+
+.cart-item-info h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.cart-item-info p {
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* Botones − cantidad + */
+.qty-control {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.qty-control button {
+    width: 32px;
+    height: 32px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-weight: 800;
+}
+
+.qty-control button:disabled {
+    opacity: .4;
+}
+
+.qty-control span {
+    min-width: 26px;
+    text-align: center;
+    font-weight: 800;
+}
+
+.cart-item-total {
+    min-width: 90px;
+    text-align: right;
+    font-weight: 800;
+}
+
+.btn-remove {
+    background: transparent;
+    border: 1px solid #ff6b6b;
+    color: #ff9b9b;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 10px;
+}
+
+.btn-remove:hover {
+    background: #ff6b6b;
+    color: #fff;
+}
+
+/* Resumen con el total */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.summary-row.total {
+    margin-top: 6px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.empty-state {
+    padding: 28px 0;
+    color: var(--muted);
+    text-align: center;
+}
+
+
+/* ==================== 6. TABLAS (historial y administración) ==================== */
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.mv-table {
+    width: 100%;
+    min-width: 640px;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.mv-table caption {
+    caption-side: top;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 0 0 8px;
+}
+
+.mv-table th {
+    background: var(--nav);
+    color: #e7f0f8;
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 11px;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+}
+
+.mv-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+}
+
+.mv-table tbody tr:hover {
+    background: #26354a;
+}
+
+/* Botones pequeños dentro de una tabla */
+.btn-mini {
+    background: var(--panel-2);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 9px;
+    margin: 2px;
+}
+
+.btn-mini:hover {
+    background: var(--accent);
+    color: #0e1a26;
+}
+
+.btn-mini.peligro {
+    border-color: #ff6b6b;
+    color: #ff9b9b;
+}
+
+.btn-mini.peligro:hover {
+    background: #ff6b6b;
+    color: #fff;
+}
+
+.tag-rol {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: var(--panel-2);
+    color: var(--accent);
+}
+
+.tag-rol.administrador {
+    background: #3b3214;
+    color: #ffd479;
+}
+
+
+/* ==================== 7. ADMINISTRACIÓN: PESTAÑAS Y RESUMEN ==================== */
+
+.admin-tabs {
+    border-bottom: 1px solid var(--line);
+    gap: 4px;
+}
+
+.admin-tabs .nav-link {
+    color: var(--muted);
+    border: 1px solid transparent;
+    border-radius: 0;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .5px;
+}
+
+.admin-tabs .nav-link:hover {
+    color: #fff;
+    border-color: var(--line);
+}
+
+.admin-tabs .nav-link.active {
+    background: var(--panel);
+    color: var(--accent);
+    border-color: var(--line) var(--line) var(--panel);
+}
+
+/* Tarjetas con números del inventario */
+.stat-card {
+    background: var(--panel-2);
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    height: 100%;
+}
+
+.stat-card span {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+}
+
+.stat-card strong {
+    font-size: 26px;
+}
+
+.stat-card.alerta {
+    border-color: #ffd479;
+}
+
+
+/* ==================== 8. CONFIRMACIÓN Y AVISOS ==================== */
+
+.confirm-icon {
+    font-size: 54px;
+    line-height: 1;
+    color: var(--offer);
+}
+
+.notice-demo {
+    margin-top: 28px;
+    padding: 12px 16px;
+    border-left: 4px solid #ffd479;
+    background: #2f2a16;
+    color: #f1e3b0;
+    font-size: 13px;
+}
+
+
+/* ==================== 9. RESPONSIVIDAD ==================== */
+
+/* S3: el menú ahora se despliega desde 992 px (navbar-expand-lg).
+   Entre 768 y 991 px (tablet) el menú está colapsado, así que se
+   repiten aquí los estilos de menú vertical que styles.css aplica
+   en celular. */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .top-nav .navbar-collapse {
+        padding-bottom: 10px;
+    }
+
+    .top-nav .navbar-nav .nav-link {
+        padding: 11px 14px;
+        border-bottom: 0;
+        border-left: 3px solid transparent;
+    }
+
+    .top-nav .navbar-nav .nav-link.active {
+        border-left-color: var(--accent);
+    }
+}
+
+/* Escritorio mediano: enlaces algo más angostos para que quepan todos */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .top-nav .navbar-nav .nav-link {
+        padding: 15px 13px;
+        font-size: 12px;
+    }
+
+    .nav-session-name {
+        max-width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+/* Menú colapsado (celular y tablet): sesión y SALIR en una línea */
+@media (max-width: 991.98px) {
+    .nav-session {
+        padding: 10px 14px;
+        justify-content: space-between;
+        border-top: 1px solid var(--line);
+    }
+}
+
+/* Celular: menú en columna, sesión y salir en una línea */
+@media (max-width: 767.98px) {
+    .cart-item img {
+        width: 72px;
+    }
+
+    .cart-item-total {
+        text-align: left;
+    }
+
+    .stat-card strong {
+        font-size: 22px;
+    }
+}
+
+/* Celular pequeño: los botones del formulario ocupan todo el ancho */
+@media (max-width: 575.98px) {
+    .form-buttons .cta,
+    .form-buttons button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .stock-line {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-cart {
+        width: 100%;
+    }
+}
+
+/* Número de stock entre los botones − y + de la tabla de administración */
+.mv-table td strong {
+    display: inline-block;
+    min-width: 28px;
+    text-align: center;
+}

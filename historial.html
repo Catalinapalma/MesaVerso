@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+        name="description"
+        content="Historial de compras en MesaVerso."
+    >
+
+    <title>Mis compras | MesaVerso</title>
+
+    <!-- S3: ícono de la pestaña (evita el error 404 de favicon.ico en la consola). -->
+    <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+    <!-- S2: Bootstrap 5.3.6 guardado en vendor/ (funciona sin conexión a internet). -->
+    <link rel="stylesheet" href="vendor/bootstrap.min.css">
+
+    <!-- S1: estilos propios. Se cargan DESPUÉS de Bootstrap para conservar el diseño de MesaVerso. -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- S3: estilos de las pantallas nuevas (login, carrito, administración...). -->
+    <link rel="stylesheet" href="css/s3.css">
+</head>
+
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="site-header">
+
+        <div class="shell header-inner">
+
+            <a
+                class="brand"
+                href="index.html"
+                aria-label="MesaVerso, ir al inicio"
+            >
+                <span class="logo-mark" aria-hidden="true">⚄</span>
+
+                <span>
+                    MESAVERSO
+                    <small>Tu universo de juegos de mesa</small>
+                </span>
+            </a>
+
+            <span class="header-aside d-none d-md-inline">
+                UNA MESA. MIL AVENTURAS.
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- ==================== NAVEGACIÓN ==================== -->
+    <!-- S2: navbar de Bootstrap. En pantallas pequeñas el menú se oculta tras el botón ☰.
+         S3: se cambia a navbar-expand-lg porque el menú tiene más opciones.
+         Cada opción de la derecha tiene data-rol: js/sesion-s3.js la muestra
+         u oculta según quién inició sesión (invitado, cliente o administrador). -->
+    <nav class="navbar navbar-expand-lg top-nav" aria-label="Navegación principal" data-bs-theme="dark">
+
+        <div class="shell nav-inner">
+
+            <span class="navbar-brand d-lg-none">MENÚ</span>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                    aria-controls="menuPrincipal" aria-expanded="false"
+                    aria-label="Abrir o cerrar el menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">TIENDA</a></li>
+                    <li class="nav-item"><a class="nav-link" href="categorias.html">CATEGORÍAS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ofertas.html">OFERTAS</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- Invitado: aún no inicia sesión -->
+                    <li class="nav-item" data-rol="invitado"><a class="nav-link" href="login.html">INGRESAR</a></li>
+                    <li class="nav-item" data-rol="invitado"><a class="nav-link nav-register" href="registro.html">REGISTRO</a></li>
+
+                    <!-- Cliente: compra y revisa sus pedidos -->
+                    <li class="nav-item" data-rol="cliente" hidden>
+                        <a class="nav-link" href="carrito.html">CARRITO<span id="contadorCarrito" class="nav-cart-count">0</span></a>
+                    </li>
+                    <li class="nav-item" data-rol="cliente" hidden><a class="nav-link" href="historial.html">MIS COMPRAS</a></li>
+
+                    <!-- Administrador: gestiona productos, inventario y usuarios -->
+                    <li class="nav-item" data-rol="administrador" hidden><a class="nav-link nav-register" href="admin.html">ADMINISTRAR</a></li>
+
+                    <!-- Cualquier sesión iniciada -->
+                    <li class="nav-item" data-rol="sesion" hidden><a class="nav-link" href="perfil.html">PERFIL</a></li>
+                    <li class="nav-item nav-session" data-rol="sesion" hidden>
+                        <span id="sesionActual" class="nav-session-name"></span>
+                        <button id="cerrarSesion" class="btn-logout" type="button">SALIR</button>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <main id="contenido" class="shell">
+
+        <!-- ==================== RUTA DE NAVEGACIÓN ==================== -->
+        <p class="breadcrumb">
+            <a href="index.html">Tienda</a>
+            <span aria-hidden="true">›</span>
+            Mis compras
+        </p>
+
+
+        <!-- ==================== ENCABEZADO ==================== -->
+        <div class="category-header">
+
+            <div>
+                <span class="eyebrow">CLUB MESAVERSO</span>
+                <h1>Mis compras</h1>
+                <p>
+                    Historial de pedidos asociados a tu cuenta.
+                </p>
+            </div>
+
+            <span class="big-symbol" aria-hidden="true">☰</span>
+
+        </div>
+
+
+        <section class="section" aria-labelledby="titulo-historial">
+
+            <!-- Resumen calculado con reduce() -->
+            <div class="row g-3 mb-4">
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="stat-card"><span>Pedidos</span><strong id="totalPedidos">0</strong></div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="stat-card"><span>Juegos comprados</span><strong id="totalJuegos">0</strong></div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="stat-card"><span>Total gastado</span><strong id="totalGastado">$0</strong></div>
+                </div>
+            </div>
+
+            <div class="register-panel">
+
+                <h2 id="titulo-historial" class="section-label">DETALLE DE PEDIDOS</h2>
+
+                <p id="mensajeHistorial" class="register-intro" aria-live="polite"></p>
+
+                <div class="table-wrap">
+                    <table class="mv-table">
+                        <caption>Pedidos de la cuenta, del más reciente al más antiguo</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">N°</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Productos</th>
+                                <th scope="col">Pago</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <!-- JavaScript (js/historial-s3.js) crea una fila por pedido. -->
+                        <tbody id="tablaHistorial"></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- S3: aviso obligatorio. Todo lo que ocurre en esta página es una simulación. -->
+        <p class="notice-demo">
+            Sitio académico: cuentas, stock, carrito, pedidos y pagos son ficticios.
+            Los datos se guardan solo en este navegador (localStorage / sessionStorage).
+            No existe servidor ni pago real.
+        </p>
+
+    </main>
+
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="site-footer">
+
+        <div class="shell">
+
+            MESAVERSO © <span id="anio-actual">2026</span>
+
+            <span>
+                · Catálogo demostrativo para FullStack II
+                · Precios ficticios
+            </span>
+
+        </div>
+
+    </footer>
+
+    <!-- S2: Bootstrap JS (menú colapsable y pestañas). -->
+    <script src="vendor/bootstrap.bundle.min.js"></script>
+
+    <!-- S3: datos ficticios y sesión. Deben ir ANTES que los demás archivos propios. -->
+    <script src="js/datos-s3.js"></script>
+    <script src="js/sesion-s3.js"></script>
+
+    <!-- S2: JavaScript propio común a todas las páginas (menú activo, año del pie). -->
+    <script src="js/main.js"></script>
+
+    <!-- S3: historial de pedidos del cliente. -->
+    <script src="js/historial-s3.js"></script>
+
+</body>
+</html>

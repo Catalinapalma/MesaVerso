@@ -1,0 +1,39 @@
+<div class="shell">
+  <p class="breadcrumb">
+    <a routerLink="/">Tienda</a>
+    <span aria-hidden="true">›</span>
+    <a routerLink="/carrito">Carrito</a>
+    <span aria-hidden="true">›</span>
+    Confirmación
+  </p>
+
+  <section class="section row g-4 justify-content-center" aria-labelledby="titulo-confirmacion">
+    <div class="col-12 col-lg-8">
+      <div class="register-panel text-center">
+        <ng-container *ngIf="pedido; else sinPedido">
+          <div class="confirm-icon" aria-hidden="true">✓</div>
+          <h1 id="titulo-confirmacion" class="mt-2">¡Compra confirmada!</h1>
+          <p class="register-intro">Pago simulado aprobado. No se realizó ningún cobro real.</p>
+          <div class="text-start">
+            <p><strong>Pedido N.º {{pedido.id}}</strong> · {{pedido.fecha}} · {{pedido.estado}}</p>
+            <ul class="list-unstyled">
+              <li *ngFor="let item of pedido.items">{{item.nombre}} × {{item.cantidad}}</li>
+            </ul>
+            <p><strong>Total: {{catalogo.moneda(pedido.total)}}</strong></p>
+            <p>Despacho a: {{pedido.despacho}} · Pago: {{pedido.pago}}</p>
+          </div>
+          <div class="form-buttons justify-content-center">
+            <a class="cta" routerLink="/historial">Ver mis compras</a>
+            <a class="cta cta-secondary" routerLink="/categorias">Seguir comprando</a>
+          </div>
+        </ng-container>
+        <ng-template #sinPedido>
+          <h1 id="titulo-confirmacion">Aún no hay un pedido para mostrar</h1>
+          <a class="cta mt-3" routerLink="/">Ir a la tienda</a>
+        </ng-template>
+      </div>
+    </div>
+  </section>
+
+  <p class="notice-demo">Sitio académico: cuentas, carrito, pedidos y pagos son ficticios. No existe servidor ni pago real.</p>
+</div>

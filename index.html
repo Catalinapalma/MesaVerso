@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+          content="MesaVerso: catálogo de juegos de mesa de estrategia, familiares, cartas y cooperativos.">
+
+    <title>Tienda | MesaVerso</title>
+
+    <!-- S3: ícono de la pestaña (evita el error 404 de favicon.ico en la consola). -->
+    <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+    <!-- S2: Bootstrap 5.3.6 guardado en vendor/ (funciona sin conexión a internet). -->
+    <link rel="stylesheet" href="vendor/bootstrap.min.css">
+
+    <!-- S1: estilos propios. Se cargan DESPUÉS de Bootstrap para conservar el diseño de MesaVerso. -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- S3: estilos agregados en la Semana 3 (menú por rol, stock, carrito...). -->
+    <link rel="stylesheet" href="css/s3.css">
+</head>
+
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="site-header">
+        <div class="shell header-inner">
+
+            <a class="brand" href="index.html" aria-label="MesaVerso, ir al inicio">
+                <span class="logo-mark" aria-hidden="true">⚄</span>
+                <span>
+                    MESAVERSO
+                    <small>Tu universo de juegos de mesa</small>
+                </span>
+            </a>
+
+            <span class="header-aside d-none d-md-inline">UNA MESA. MIL AVENTURAS.</span>
+
+        </div>
+    </header>
+
+
+    <!-- ==================== NAVEGACIÓN ==================== -->
+    <!-- S2: navbar de Bootstrap. En pantallas pequeñas el menú se oculta tras el botón ☰.
+         S3: se cambia a navbar-expand-lg porque el menú tiene más opciones.
+         Cada opción de la derecha tiene data-rol: js/sesion-s3.js la muestra
+         u oculta según quién inició sesión (invitado, cliente o administrador). -->
+    <nav class="navbar navbar-expand-lg top-nav" aria-label="Navegación principal" data-bs-theme="dark">
+
+        <div class="shell nav-inner">
+
+            <span class="navbar-brand d-lg-none">MENÚ</span>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                    aria-controls="menuPrincipal" aria-expanded="false"
+                    aria-label="Abrir o cerrar el menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">TIENDA</a></li>
+                    <li class="nav-item"><a class="nav-link" href="categorias.html">CATEGORÍAS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ofertas.html">OFERTAS</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- Invitado: aún no inicia sesión -->
+                    <li class="nav-item" data-rol="invitado"><a class="nav-link" href="login.html">INGRESAR</a></li>
+                    <li class="nav-item" data-rol="invitado"><a class="nav-link nav-register" href="registro.html">REGISTRO</a></li>
+
+                    <!-- Cliente: compra y revisa sus pedidos -->
+                    <li class="nav-item" data-rol="cliente" hidden>
+                        <a class="nav-link" href="carrito.html">CARRITO<span id="contadorCarrito" class="nav-cart-count">0</span></a>
+                    </li>
+                    <li class="nav-item" data-rol="cliente" hidden><a class="nav-link" href="historial.html">MIS COMPRAS</a></li>
+
+                    <!-- Administrador: gestiona productos, inventario y usuarios -->
+                    <li class="nav-item" data-rol="administrador" hidden><a class="nav-link nav-register" href="admin.html">ADMINISTRAR</a></li>
+
+                    <!-- Cualquier sesión iniciada -->
+                    <li class="nav-item" data-rol="sesion" hidden><a class="nav-link" href="perfil.html">PERFIL</a></li>
+                    <li class="nav-item nav-session" data-rol="sesion" hidden>
+                        <span id="sesionActual" class="nav-session-name"></span>
+                        <button id="cerrarSesion" class="btn-logout" type="button">SALIR</button>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <main id="contenido" class="shell">
+
+
+        <!-- ==================== JUEGO DESTACADO ==================== -->
+        <section class="section featured" aria-labelledby="destacados">
+
+            <h1 id="destacados" class="section-label">
+                DESTACADOS Y RECOMENDADOS
+            </h1>
+
+            <!-- S2: imagen y texto lado a lado en escritorio; uno bajo el otro en celular y tablet. -->
+            <div class="feature-layout row g-0">
+
+                <!-- Imagen destacada -->
+                <div class="feature-image col-12 col-md-7">
+                    <img
+                        src="img/catan.png"
+                        alt="Ilustración de Catan con casillas hexagonales, fichas y dado"
+                        width="960"
+                        height="540"
+                    >
+                </div>
+
+                <!-- Información de Catan -->
+                <div class="feature-copy col-12 col-md-5">
+
+                    <span class="eyebrow">JUEGO DESTACADO</span>
+
+                    <h2>CATAN</h2>
+
+                    <p>
+                        Construye, negocia y conquista la isla.
+                        Tu próxima gran partida comienza aquí.
+                    </p>
+
+                    <div class="feature-bottom">
+
+                        <!-- Precio y descuento -->
+                        <div class="price-line">
+
+                            <span class="discount">-20%</span>
+
+                            <div class="prices">
+                                <span class="old-price">$34.990</span>
+                                <strong>$27.992</strong>
+                            </div>
+
+                        </div>
+
+                        <!-- Enlace a estrategia -->
+                        <a class="cta" href="estrategia.html">
+                            Explorar estrategia
+                            <span aria-hidden="true">→</span>
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ==================== CATEGORÍAS ==================== -->
+        <section class="section" id="categorias">
+
+            <div class="section-heading">
+                <h2>EXPLORA POR CATEGORÍA</h2>
+                <p>Descubre una nueva forma de jugar</p>
+            </div>
+
+            <!-- S2: rejilla Bootstrap: 1 columna (celular), 2 (tablet), 4 (escritorio). -->
+            <div class="row g-3 category-grid">
+
+
+                <!-- Categoría 1: Estrategia -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                <a class="category-card h-100" href="estrategia.html">
+
+                    <div class="category-image">
+                        <img
+                            src="img/catan.png"
+                            alt="Ilustración de juegos de Estrategia"
+                            width="960"
+                            height="540"
+                            loading="lazy"
+                        >
+                    </div>
+
+                    <div class="category-caption">
+                        <div>
+                            <span class="category-index">01 / 04</span>
+                            <h3>Estrategia</h3>
+                        </div>
+
+                        <span class="cat-arrow" aria-hidden="true">↗</span>
+                    </div>
+
+                    <span class="category-link">Ver colección →</span>
+
+                </a>
+                </div>
+
+
+                <!-- Categoría 2: Familiares -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                <a class="category-card h-100" href="familiares.html">
+
+                    <div class="category-image">
+                        <img
+                            src="img/dixit.png"
+                            alt="Ilustración de juegos de Familiares"
+                            width="960"
+                            height="540"
+                            loading="lazy"
+                        >
+                    </div>
+
+                    <div class="category-caption">
+                        <div>
+                            <span class="category-index">02 / 04</span>
+                            <h3>Familiares</h3>
+                        </div>
+
+                        <span class="cat-arrow" aria-hidden="true">↗</span>
+                    </div>
+
+                    <span class="category-link">Ver colección →</span>
+
+                </a>
+                </div>
+
+
+                <!-- Categoría 3: Cartas -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                <a class="category-card h-100" href="cartas.html">
+
+                    <div class="category-image">
+                        <img
+                            src="img/uno.png"
+                            alt="Ilustración de juegos de Cartas"
+                            width="960"
+                            height="540"
+                            loading="lazy"
+                        >
+                    </div>
+
+                    <div class="category-caption">
+                        <div>
+                            <span class="category-index">03 / 04</span>
+                            <h3>Cartas</h3>
+                        </div>
+
+                        <span class="cat-arrow" aria-hidden="true">↗</span>
+                    </div>
+
+                    <span class="category-link">Ver colección →</span>
+
+                </a>
+                </div>
+
+
+                <!-- Categoría 4: Cooperativos -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                <a class="category-card h-100" href="cooperativos.html">
+
+                    <div class="category-image">
+                        <img
+                            src="img/pandemic.png"
+                            alt="Ilustración de juegos de Cooperativos"
+                            width="960"
+                            height="540"
+                            loading="lazy"
+                        >
+                    </div>
+
+                    <div class="category-caption">
+                        <div>
+                            <span class="category-index">04 / 04</span>
+                            <h3>Cooperativos</h3>
+                        </div>
+
+                        <span class="cat-arrow" aria-hidden="true">↗</span>
+                    </div>
+
+                    <span class="category-link">Ver colección →</span>
+
+                </a>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ==================== OFERTAS ESPECIALES ==================== -->
+        <section class="section" id="ofertas">
+
+            <div class="section-heading">
+
+                <h2>OFERTAS ESPECIALES</h2>
+
+                <p>
+                    <a href="ofertas.html">
+                        Ver todas las ofertas →
+                    </a>
+                </p>
+
+            </div>
+
+            <!-- S2: la rejilla Bootstrap reemplaza a CSS Grid: 1 columna (celular), 2 (tablet), 3 (escritorio). -->
+            <div class="row g-3 game-grid">
+
+
+                <!-- Oferta 1: Dixit -->
+                <div class="col-12 col-md-6 col-lg-4">
+                <article class="game-card h-100">
+
+                    <div class="cover">
+                        <img
+                            src="img/dixit.png"
+                            alt="Ilustración de Dixit"
+                            width="960"
+                            height="540"
+                            loading="lazy"
+                        >
+
+                        <span class="cover-sale">-15%</span>
+                    </div>
+
+                    <div class="game-info">
+
+                        <h3>Dixit</h3>
+
+                        <p>
+                            Imaginación y pistas para toda la familia.
+                        </p>
+
+                        <div class="price-line">
+
+                            <span class="discount">-15%</span>
+
+                            <div class="prices">
+                                <span class="old-price">$29.990</span>
+                                <strong>$25.492</strong>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </article>
+                </div>
+
+
+                <!-- Oferta 2: Ticket to Ride -->
+                <div class="col-12 col-md-6 col-lg-4">
+                <article class="game-card h-100">
+
+                    <div class="cover">
+                        <img
+                            src="img/ticket.png"
+                            alt="Ilustración de Ticket to Ride"
+                            width="960"
+                            height="540"
+                            loading="lazy"
+                        >
+
+                        <span class="cover-sale">-10%</span>
+                    </div>
+
+                    <div class="game-info">
+
+                        <h3>Ticket to Ride</h3>
+
+                        <p>
+                            Conecta ciudades y completa rutas ferroviarias.
+                        </p>
+
+                        <div class="price-line">
+
+                            <span class="discount">-10%</span>
+
+                            <div class="prices">
+                                <span class="old-price">$39.990</span>
+                                <strong>$35.991</strong>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </article>
+                </div>
+
+
+                <!-- Oferta 3: Pandemic -->
+                <div class="col-12 col-md-6 col-lg-4">
+                <article class="game-card h-100">
+
+                    <div class="cover">
+                        <img
+                            src="img/pandemic.png"
+                            alt="Ilustración de Pandemic"
+                            width="960"
+                            height="540"
+                            loading="lazy"
+                        >
+
+                        <span class="cover-sale">-15%</span>
+                    </div>
+
+                    <div class="game-info">
+
+                        <h3>Pandemic</h3>
+
+                        <p>
+                            Colaboren para detener brotes por el mundo.
+                        </p>
+
+                        <div class="price-line">
+
+                            <span class="discount">-15%</span>
+
+                            <div class="prices">
+                                <span class="old-price">$34.990</span>
+                                <strong>$29.742</strong>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </article>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ==================== ¿QUÉ JUGAMOS HOY? ==================== -->
+        <!-- S2: manipulación del DOM. El botón crea (createElement) y elimina (remove)
+             una tarjeta de recomendación sin recargar la página. Ver js/inicio.js -->
+        <section class="section" aria-labelledby="sugerencia-titulo">
+
+            <div class="section-heading">
+                <h2 id="sugerencia-titulo">¿QUÉ JUGAMOS HOY?</h2>
+                <p>Deja que MesaVerso elija por ti</p>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+                <button id="btnSugerir" class="cta border-0" type="button">
+                    🎲 Sugerir un juego
+                </button>
+                <button id="btnQuitarSugerencia" class="cta cta-secondary" type="button" hidden>
+                    Quitar sugerencia
+                </button>
+            </div>
+
+            <div id="zonaSugerencia" aria-live="polite"></div>
+
+        </section>
+
+
+        <!-- ==================== INVITACIÓN AL REGISTRO ==================== -->
+        <!-- S2: enlace al nuevo formulario de registro (registro.html). -->
+        <!-- S3: data-rol="invitado": el banner se oculta cuando ya hay una sesión iniciada. -->
+        <section class="section join-banner" aria-labelledby="unete" data-rol="invitado">
+            <div class="row g-3 align-items-center">
+
+                <div class="col-12 col-md-8">
+                    <span class="eyebrow">CLUB MESAVERSO</span>
+                    <h2 id="unete">Regístrate y acumula recompensas</h2>
+                    <p>
+                        Guarda el historial de los juegos que compras y gana
+                        beneficios mientras más juegas.
+                    </p>
+                </div>
+
+                <div class="col-12 col-md-4 text-md-end">
+                    <a class="cta" href="registro.html">Crear mi cuenta →</a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="site-footer">
+
+        <div class="shell">
+            MESAVERSO © <span id="anio-actual">2026</span>
+            <span>
+                · Catálogo demostrativo para FullStack II
+                · Precios ficticios
+            </span>
+        </div>
+
+    </footer>
+
+    <!-- S2: Bootstrap JS. Solo hace funcionar el menú colapsable (botón ☰). -->
+    <script src="vendor/bootstrap.bundle.min.js"></script>
+
+    <!-- S3: datos ficticios y menú según el rol. Deben ir ANTES que los demás archivos propios. -->
+    <script src="js/datos-s3.js"></script>
+    <script src="js/sesion-s3.js"></script>
+
+    <!-- S2: JavaScript propio común a todas las páginas (menú activo, año del pie). -->
+    <script src="js/main.js"></script>
+
+    <!-- S2: sugerencia de juego creada dinámicamente. -->
+    <script src="js/inicio.js"></script>
+
+</body>
+</html>
